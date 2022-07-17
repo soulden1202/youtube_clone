@@ -11,6 +11,7 @@ import { BASE_URL } from "../../utils";
 import useAuthStore from "../../store/authStore";
 import Like from "../../components/Like";
 import Dislike from "../../components/Dislike";
+import Comments from "../../components/Comments";
 
 interface IProps {
   postDetails: Video;
@@ -20,6 +21,7 @@ const Detail = ({ postDetails }: IProps) => {
   const [post, setpost] = useState(postDetails);
   const [showDes, setshowDes] = useState(false);
   const { userProfile }: { userProfile: any } = useAuthStore();
+  const [comment, setComment] = useState("");
 
   const handleLike = async (like: boolean) => {
     if (userProfile) {
@@ -42,6 +44,20 @@ const Detail = ({ postDetails }: IProps) => {
       });
 
       setpost({ ...post, likes: data.likes, dislikes: data.dislikes });
+    }
+  };
+
+  const addComment = async (e) => {
+    e.preventDefault();
+
+    if (userProfile && comment) {
+      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+
+      setpost({ ...post, comments: data.comments });
+      setComment("");
     }
   };
 
@@ -162,6 +178,14 @@ const Detail = ({ postDetails }: IProps) => {
                 </div>
               </div>
             )}
+          </div>
+          <div>
+            <Comments
+              comment={comment}
+              setComment={setComment}
+              addComment={addComment}
+              comments={post.comments}
+            ></Comments>
           </div>
         </div>
         <div className="h-[92vh] overflow-hidden">

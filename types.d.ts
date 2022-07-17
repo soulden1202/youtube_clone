@@ -40,8 +40,11 @@ export interface Video {
   comments: {
     comment: string;
     _key: string;
+    commentAt: string;
     postedBy: {
       _ref: string;
+      userName: string;
+      image: string;
     };
   }[];
   userId: string;

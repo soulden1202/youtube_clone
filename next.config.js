@@ -7,6 +7,7 @@ const nextConfig = {
       "i.ibb.co",
       "cdn.sanity.io",
       "lh3.googleusercontent.com",
+      "upload.wikimedia.org",
     ],
   },
 };

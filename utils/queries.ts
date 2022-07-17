@@ -68,6 +68,9 @@ export const postDetailQuery = (postId: string | string[]) => {
       postedBy->{
         _ref,
       _id,
+      userName,
+      image,
+      commentAt
     },
     }
   }`;
