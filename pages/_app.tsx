@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { useState, useEffect } from "react";
-import { ThemeProvider } from "@material-tailwind/react";
 
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";

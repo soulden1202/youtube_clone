@@ -19,4 +19,7 @@ export default {
       type: "datetime",
     },
   ],
+  initialValue: () => ({
+    commentAt: new Date().toISOString(),
+  }),
 };
