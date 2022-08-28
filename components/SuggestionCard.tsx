@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Video } from "../types";
+import { IRecomendation, Video } from "../types";
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,13 +12,12 @@ import { useRouter } from "next/router";
 import { BASE_URL } from "../utils";
 
 interface IProps {
-  post: Video;
+  post: IRecomendation;
 }
 
 const VideoCard: NextPage<IProps> = ({ post }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const post_img = post.postedBy.image;
   const data = { id: post._id };
 
   const handlePostClick = () => {
@@ -26,10 +25,10 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
   };
 
   return (
-    <div className=" object-cover ">
-      <div className="flex flex-col object-cover ">
+    <div className="flex flex-row ">
+      <div className="flex flex-col object-cover w-[50%]">
         <div
-          className="rounded-3xl object-cover  h-full w-full"
+          className="rounded-3xl object-cover h-full w-full"
           onMouseEnter={() => {
             videoRef?.current?.play();
           }}
@@ -40,14 +39,14 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           <Link href={`/detail/${post._id}`}>
             <video
               ref={videoRef}
-              className="bg-white dark:bg-black flex mx-1 rounded-2xl cursor-pointer h-[200px] w-full md:h-[300px] border-2 border-gray-500"
+              className="bg-white dark:bg-black flex mx-1 rounded-2xl cursor-pointer w-full h-[100px] border-2 border-gray-500"
               src={post.uploadVideo.video.asset.url}
               poster={post.uploadVideo.thumbnail.asset.url}
               muted
               onClick={handlePostClick}
             ></video>
           </Link>
-          <div className="flex justify-end text-baclk dark:text-white mr-3">
+          <div className="flex justify-start text-baclk dark:text-white ml-3">
             {videoRef?.current?.duration && (
               <p>
                 {Math.floor(videoRef.current.duration / 60).toFixed(0)}:
@@ -57,21 +56,8 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="mt-3">
+      <div className="mt-1 ml-3">
         <div className="flex gap-3 cursor-pointer font-semibold rounded">
-          <div className="md:w-10 md:h10 w-5 h-5">
-            <Link href="/">
-              <>
-                <Image
-                  width={62}
-                  height={62}
-                  className="rounded-full"
-                  src={post.postedBy.image}
-                  alt="profile photo"
-                ></Image>
-              </>
-            </Link>
-          </div>
           <div>
             <Link href="/">
               <div className="flex flex-col  gap-1">

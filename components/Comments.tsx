@@ -107,41 +107,44 @@ const Comments = ({ comment, comments, addComment, setComment }: IProps) => {
         </div>
         <div className="flex flex-col gap-10">
           {comments?.length > 0 ? (
-            comments.map((comment) => (
-              <div className="flex flex-row w-full gap-5">
-                <div>
-                  <>
-                    {comment?.postedBy?.image && (
-                      <Image
-                        width={45}
-                        height={45}
-                        className="rounded-full cursor-pointer"
-                        src={
-                          comment?.postedBy?.image ||
-                          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
-                        }
-                        alt="user-comment-profile"
-                      ></Image>
-                    )}
-                  </>
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex flex-row items-baseline">
-                    <span className="dark:text-white mr-3 font-semibold">
-                      {comment?.postedBy?.userName}
-                    </span>
-                    <span className="text-gray-500 text-xs">
-                      {moment(comment.commentAt).fromNow()}
-                    </span>
-                  </div>
+            comments
+              .slice(0)
+              .reverse()
+              .map((comment) => (
+                <div className="flex flex-row w-full gap-5">
                   <div>
-                    <span className="dark:text-white text-lg">
-                      {comment.comment}
-                    </span>
+                    <>
+                      {comment?.postedBy?.image && (
+                        <Image
+                          width={45}
+                          height={45}
+                          className="rounded-full cursor-pointer"
+                          src={
+                            comment?.postedBy?.image ||
+                            "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                          }
+                          alt="user-comment-profile"
+                        ></Image>
+                      )}
+                    </>
+                  </div>
+                  <div className="flex flex-col">
+                    <div className="flex flex-row items-baseline">
+                      <span className="dark:text-white mr-3 font-semibold">
+                        {comment?.postedBy?.userName}
+                      </span>
+                      <span className="text-gray-500 text-xs">
+                        {moment(comment.commentAt).fromNow()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="dark:text-white text-lg">
+                        {comment.comment}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           ) : (
             <NoResults text="No comments" />
           )}

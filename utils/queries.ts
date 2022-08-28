@@ -24,16 +24,6 @@ export const allPostsQuery = () => {
       },
     likes,
     viewCount,
-    
-    comments[]{
-      comment,
-      _key,
-      postedBy->{
-      _id,
-      userName,
-      image
-    },
-    }
   }`;
 
   return query;
@@ -66,12 +56,12 @@ export const postDetailQuery = (postId: string | string[]) => {
     comments[]{
       comment,
       _key,
+      commentAt,
       postedBy->{
         _ref,
       _id,
       userName,
-      image,
-      commentAt
+      image     
     },
     }
   }`;
