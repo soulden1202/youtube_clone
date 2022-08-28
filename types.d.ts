@@ -45,10 +45,34 @@ export interface Video {
       _ref: string;
       userName: string;
       image: string;
+      _id: string;
     };
   }[];
   userId: string;
   description: string;
+}
+
+export interface IRecomendation {
+  caption: string;
+  uploadVideo: {
+    video: {
+      asset: {
+        _id: string;
+        url: string;
+      };
+    };
+    thumbnail: {
+      asset: {
+        url: string;
+      };
+    };
+  };
+  _id: string;
+  createdAt: string;
+  viewCount: number;
+  postedBy: {
+    userName: string;
+  };
 }
 
 export interface IUser {

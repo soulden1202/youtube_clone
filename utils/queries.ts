@@ -62,6 +62,7 @@ export const postDetailQuery = (postId: string | string[]) => {
      likes,
      dislikes,
      description,
+     tags,
     comments[]{
       comment,
       _key,
@@ -183,33 +184,40 @@ export const userLikedPostsQuery = (userId: string | string[]) => {
   return query;
 };
 
-export const topicPostsQuery = (topic: string | string[]) => {
-  const query = `*[_type == "post" && topic match '${topic}*'] {
+export const topicPostsQuery = (tags: string | string[], id: string) => {
+  let temp = "";
+
+  for (let i = 0; i < tags.length; i++) {
+    if (i == tags.length - 1) {
+      temp = temp + ` "${tags[i]}" in tags`;
+    } else {
+      temp = temp + ` "${tags[i]}" in tags ||`;
+    }
+  }
+
+  const query = `*[_type == "post" && _id != '${id}' && (${temp})] {
     _id,
      caption,
-       video{
-        asset->{
-          _id,
-          url
+     createdAt,
+     uploadVideo{
+        video{
+          asset ->{
+            _id,
+            url
+          }
+        }, 
+        thumbnail{
+          asset ->{
+            url
+          }
         }
       },
       userId,
-    postedBy->{
-      _id,
-      userName,
-      image
-    },
- likes,
-
-    comments[]{
-      comment,
-      _key,
-      postedBy->{
-      _id,
-      userName,
-      image
-    },
-    }
+      postedBy->{  
+        userName,
+      },
+    viewCount,
+    
   }`;
 
   return query;

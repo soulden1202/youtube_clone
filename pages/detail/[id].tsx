@@ -6,7 +6,7 @@ import { GoVerified } from "react-icons/go";
 import ReactLoading from "react-loading";
 import Sugestion from "../../components/Sugestion";
 import Image from "next/image";
-import { Video } from "../../types";
+import { IRecomendation, Video } from "../../types";
 import { BASE_URL } from "../../utils";
 import useAuthStore from "../../store/authStore";
 import Like from "../../components/Like";
@@ -15,13 +15,15 @@ import Comments from "../../components/Comments";
 
 interface IProps {
   postDetails: Video;
+  postRec: IRecomendation;
 }
 
-const Detail = ({ postDetails }: IProps) => {
+const Detail = ({ postDetails, postRec }: IProps) => {
   const [post, setpost] = useState(postDetails);
   const [showDes, setshowDes] = useState(false);
   const { userProfile }: { userProfile: any } = useAuthStore();
   const [comment, setComment] = useState("");
+  const [allComments, setallComments] = useState(postDetails.comments);
 
   const handleLike = async (like: boolean) => {
     if (userProfile) {
@@ -35,6 +37,8 @@ const Detail = ({ postDetails }: IProps) => {
     }
   };
 
+  console.log(postRec);
+
   const handleDislike = async (dislike: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/dislike`, {
@@ -47,17 +51,29 @@ const Detail = ({ postDetails }: IProps) => {
     }
   };
 
-  const addComment = async (e) => {
+  const addComment = async (e: any) => {
     e.preventDefault();
 
     if (userProfile && comment) {
-      const { data } = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+      const temp = {
+        comment: comment,
+        _key: "",
+        commentAt: new Date().toISOString(),
+        postedBy: {
+          _id: userProfile._id,
+          _ref: userProfile._ref,
+          userName: userProfile.userName,
+          image: userProfile.image,
+        },
+      };
+
+      setallComments([...allComments, temp]);
+      setComment("");
+
+      await axios.put(`${BASE_URL}/api/post/${post._id}`, {
         userId: userProfile._id,
         comment,
       });
-
-      setpost({ ...post, comments: data.comments });
-      setComment("");
     }
   };
 
@@ -184,7 +200,8 @@ const Detail = ({ postDetails }: IProps) => {
               comment={comment}
               setComment={setComment}
               addComment={addComment}
-              comments={post.comments}
+              comments={allComments}
+              setallcommnets={setallComments}
             ></Comments>
           </div>
         </div>
@@ -202,9 +219,17 @@ export const getServerSideProps = async ({
   params: { id: string };
 }) => {
   const { data } = await axios.get(`${BASE_URL}/api/post/${id}`);
+  const params = {
+    tags: data.tags,
+    id: data._id,
+  };
+  const recomendation = await axios.post(
+    `${BASE_URL}/api/recomendation`,
+    params
+  );
 
   return {
-    props: { postDetails: data },
+    props: { postDetails: data, postRec: recomendation.data },
   };
 };
 

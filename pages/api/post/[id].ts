@@ -23,6 +23,10 @@ export default async function handler(
     const { comment, userId } = req.body;
     const { id }: any = req.query;
 
+    const time = new Date().toISOString();
+
+    console.log(time);
+
     const data = await client
       .patch(id)
       .setIfMissing({ comments: [] })
@@ -31,7 +35,7 @@ export default async function handler(
           comment,
           _key: uuid(),
           postedBy: { _type: "postedBy", _ref: userId },
-          commentAt: new Date(),
+          commentAt: time,
         },
       ])
       .commit();

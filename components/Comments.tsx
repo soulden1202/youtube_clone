@@ -10,6 +10,7 @@ interface IProps {
   addComment: (e: React.FormEvent) => void;
   setComment: Dispatch<SetStateAction<string>>;
   comments: IComment[];
+  setallcommnets: Dispatch<SetStateAction<IComment[]>>;
 }
 
 interface IComment {
