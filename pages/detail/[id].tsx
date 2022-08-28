@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { GoVerified } from "react-icons/go";
 import ReactLoading from "react-loading";
-import Sugestion from "../../components/Sugestion";
+import Sugestion from "../../components/Suggestion";
 import Image from "next/image";
 import { IRecomendation, Video } from "../../types";
 import { BASE_URL } from "../../utils";
@@ -15,10 +15,10 @@ import Comments from "../../components/Comments";
 
 interface IProps {
   postDetails: Video;
-  postRec: IRecomendation;
+  recommendVideos: IRecomendation[];
 }
 
-const Detail = ({ postDetails, postRec }: IProps) => {
+const Detail = ({ postDetails, recommendVideos }: IProps) => {
   const [post, setpost] = useState(postDetails);
   const [showDes, setshowDes] = useState(false);
   const { userProfile }: { userProfile: any } = useAuthStore();
@@ -36,8 +36,6 @@ const Detail = ({ postDetails, postRec }: IProps) => {
       setpost({ ...post, likes: data.likes, dislikes: data.dislikes });
     }
   };
-
-  console.log(postRec);
 
   const handleDislike = async (dislike: boolean) => {
     if (userProfile) {
@@ -206,7 +204,7 @@ const Detail = ({ postDetails, postRec }: IProps) => {
           </div>
         </div>
         <div className="h-[92vh] overflow-hidden">
-          <Sugestion tags={postDetails.tags} />
+          <Sugestion recommendVideos={recommendVideos} />
         </div>
       </div>
     </div>
@@ -229,7 +227,7 @@ export const getServerSideProps = async ({
   );
 
   return {
-    props: { postDetails: data, postRec: recomendation.data },
+    props: { postDetails: data, recommendVideos: recomendation.data },
   };
 };
 

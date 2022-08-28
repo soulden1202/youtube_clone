@@ -53,6 +53,7 @@ export interface Video {
 }
 
 export interface IRecomendation {
+  _id: string;
   caption: string;
   uploadVideo: {
     video: {
