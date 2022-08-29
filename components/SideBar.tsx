@@ -1,78 +1,128 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import Image from "next/image";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import GoogleLogin from "react-google-login";
-import { AiFillHome, AiOutlineMenu } from "react-icons/ai";
+import {
+  AiFillHome,
+  AiOutlineMenu,
+  AiOutlineHome,
+  AiOutlineLike,
+  AiOutlinePlayCircle,
+} from "react-icons/ai";
 import { ImCancelCircle } from "react-icons/im";
 import Discover from "./Discover";
 import SuggestedAccounts from "./SuggestedAccounts";
 import useAuthStore from "../store/authStore";
 import Footer from "./Footer";
 
-const SideBar = () => {
-  const [showSidebar, setshowSidebar] = useState(true);
+import Logo from "../utils/extreme-11.png";
+import { Box, Button, Modal, Typography } from "@mui/material";
 
-  const { userProfile } = useAuthStore();
+interface IProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-  const normalLink =
-    "flex items-center gap-3 hover:bg-primary p-3 justify:center xl:justify-start cursor:pointer font-semibold text-[#F51997] rounded";
+const SideBar = ({ open, setOpen }: IProps) => {
+  const { userProfile }: { userProfile: any } = useAuthStore();
 
   return (
-    <div className="bg-white dark:bg-black h-[100vh]">
-      <div
-        className="block xl:hidden m-2 ml-4 mt-3 text-xl"
-        onClick={() => setshowSidebar((state) => !state)}
-      >
-        {showSidebar ? (
-          <ImCancelCircle className="text-black dark:text-white" />
-        ) : (
-          <AiOutlineMenu className="text-black dark:text-white" />
-        )}
-      </div>
-      {showSidebar && (
-        <div className="xl:w-300 w-20 flex flex-col justify-start mb-10 border-r-2 border-gray-100 xl:border-0 p-3">
-          <div className="xl:border-b-2 border-gray-100 xl:pb-4">
-            <Link href="./">
-              <div className={normalLink}>
-                <p className="text-2xl">
-                  <AiFillHome></AiFillHome>
-                </p>
-                <span className="text-xl hidden xl:block">For You</span>
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box className="absolute h-[100vh] w-[200px] bg-sidebar">
+        <div className="flex flex-col">
+          <div className="flex flex-row items-center justify-center ml-3">
+            <button
+              onClick={() => setOpen(false)}
+              className="text-white dark:text-white text-[1.5rem]  ml-3"
+            >
+              <AiOutlineMenu onClick={() => setOpen(false)} />
+            </button>
+            <Link href="/">
+              <div className="w-[100px] md:w-[130px] h-full mt-3 ml-3">
+                <Image
+                  className="cursor-pointer"
+                  src={Logo}
+                  alt="logo"
+                  height={60}
+                  width={60}
+                  layout="intrinsic"
+                ></Image>
               </div>
             </Link>
           </div>
-          {!userProfile && (
-            <div className="px-2 py-4 hidden xl:block">
-              <p className="text-gray-400 ">
-                Login to like and comment on videos
-              </p>
-              <div className="pr-4">
-                <GoogleLogin
-                  clientId=""
-                  render={(renderProps) => (
-                    <button
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                      className="cursor-pointer dark:bg-black bg-white text-lg text-[#F51997] boder-[1px] border-[#F51997] font-semibold px-6 py-3 rounded-md outline-none w-full mt-3 hover:text-white hover:bg-[#F51997] dark:hover:bg-[#F51997]"
-                    >
-                      Login
-                    </button>
-                  )}
-                  onSuccess={() => {}}
-                  onFailure={() => {}}
-                  cookiePolicy="single_host_origin"
-                />
-              </div>
-            </div>
-          )}
 
-          <Discover />
-          <SuggestedAccounts />
-          <Footer />
+          <div className="border-t-[1px] border-gray-white"></div>
+          <div className="flex flex-col items-start">
+            <Link href="/">
+              <div
+                className="flex w-full h-[3rem] hover:bg-gray-700 items-center justify-center  cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                <div className="flex flex-row gap-3 text-white items-center justify-center">
+                  <span className="text-lg">
+                    <AiOutlineHome></AiOutlineHome>
+                  </span>
+                  <span>Home</span>
+                </div>
+              </div>
+            </Link>
+
+            {userProfile && (
+              <div
+                className="flex w-full h-[3rem] hover:bg-gray-700 items-center justify-center mr-6  cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                <Link
+                  href={{
+                    pathname: "/liked",
+                    query: {
+                      id: userProfile._id,
+                    },
+                  }}
+                >
+                  <div className="flex flex-row gap-3 text-white items-center justify-center">
+                    <span className="text-lg">
+                      <AiOutlineLike></AiOutlineLike>
+                    </span>
+                    <span>Liked</span>
+                  </div>
+                </Link>
+              </div>
+            )}
+
+            {userProfile && (
+              <div
+                className="flex w-full h-[3rem] hover:bg-gray-700 items-center justify-center cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                <Link
+                  href={{
+                    pathname: "/uploaded",
+                    query: {
+                      id: userProfile._id,
+                    },
+                  }}
+                >
+                  <div className="flex flex-row gap-3 text-white items-center justify-center">
+                    <span className="text-lg">
+                      <AiOutlinePlayCircle></AiOutlinePlayCircle>
+                    </span>
+                    <span>Videos</span>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
+      </Box>
+    </Modal>
   );
 };
 

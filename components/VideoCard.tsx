@@ -26,10 +26,10 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
   };
 
   return (
-    <div className=" object-cover ">
-      <div className="flex flex-col object-cover ">
+    <div className=" flex flex-col">
+      <div className="flex flex-col ">
         <div
-          className="rounded-3xl object-cover  h-full w-full"
+          className="rounded-3xl object-cover h-full w-full"
           onMouseEnter={() => {
             videoRef?.current?.play();
           }}
@@ -40,14 +40,14 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           <Link href={`/detail/${post._id}`}>
             <video
               ref={videoRef}
-              className="bg-white dark:bg-black flex mx-1 rounded-2xl cursor-pointer h-[200px] w-full md:h-[300px] border-2 border-gray-500"
+              className="bg-white dark:bg-black flex mx-1 rounded-2xl cursor-pointer h-[200px] w-full md:h-[300px] "
               src={post.uploadVideo.video.asset.url}
               poster={post.uploadVideo.thumbnail.asset.url}
               muted
               onClick={handlePostClick}
             ></video>
           </Link>
-          <div className="flex justify-end text-baclk dark:text-white mr-3">
+          <div className="flex justify-end text-baclk dark:text-white mr-10">
             {videoRef?.current?.duration && (
               <p>
                 {Math.floor(videoRef.current.duration / 60).toFixed(0)}:
@@ -57,7 +57,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="mt-3">
+      <div className="ml-10 mt-3">
         <div className="flex gap-3 cursor-pointer font-semibold rounded">
           <div className="md:w-10 md:h10 w-5 h-5">
             <Link href="/">

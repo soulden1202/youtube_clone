@@ -88,7 +88,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
             <video
               ref={videoRef}
               autoPlay
-              className=" flex mx-1 h-[400px] lg:h-[500px] w-full"
+              className=" flex mx-1 h-[400px] lg:h-[600px] w-full"
               src={post.uploadVideo.video.asset.url}
               controls
             ></video>

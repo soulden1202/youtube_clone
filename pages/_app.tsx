@@ -6,9 +6,20 @@ import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
+import "nprogress/nprogress.css";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isSSR, setisSSR] = useState(true);
   const [isDarkMode, setisDarkMode] = useState(false);
+
+  const TopProgressBar = dynamic(
+    () => {
+      return import("../components/TopProgressBar");
+    },
+    { ssr: false }
+  );
 
   let darkmode = "";
 
@@ -40,13 +51,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
     >
       <div className={darkmode}>
-        <div className="bg-white dark:bg-black w-full h-[100vh]">
+        <div className="bg-white dark:bg-black w-full h-[110vh]">
           <NavBar isDarkMode={isDarkMode} setisDarkMode={setisDarkMode} />
           <div className="flex gap-5">
-            <div className="h-[92vh] overflow-hidden ">
-              <SideBar />
-            </div>
+            <div className="h-[92vh] overflow-hidden "></div>
             <div className="mt-4 flex flex-col gap-10 overflow-auto h-[88vh] videos flex-1 ">
+              <TopProgressBar />
               <Component {...pageProps} />
             </div>
           </div>

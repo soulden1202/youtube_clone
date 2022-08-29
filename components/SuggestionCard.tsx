@@ -56,7 +56,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="mt-1 ml-3">
+      <div className="mt-1 ml-3  w-[50%]">
         <div className="flex gap-3 cursor-pointer font-semibold rounded">
           <div>
             <Link href="/">
