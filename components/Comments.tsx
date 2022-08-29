@@ -105,7 +105,7 @@ const Comments = ({ comment, comments, addComment, setComment }: IProps) => {
         <div className="mt-10">
           <span> </span>
         </div>
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 ml-4">
           {comments?.length > 0 ? (
             comments
               .slice(0)

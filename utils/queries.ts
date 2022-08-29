@@ -69,31 +69,31 @@ export const postDetailQuery = (postId: string | string[]) => {
 };
 
 export const searchPostsQuery = (searchTerm: string | string[]) => {
-  const query = `*[_type == "post" && caption match '${searchTerm}*' || topic match '${searchTerm}*'] {
-    _id,
+  const query = `*[_type == "post" && caption match '${searchTerm}*' || '${searchTerm}*' in tags] {
+       _id,
      caption,
-       video{
-        asset->{
-          _id,
-          url
+     createdAt,
+     uploadVideo{
+        video{
+          asset ->{
+            _id,
+            url
+          }
+        }, 
+        thumbnail{
+          asset ->{
+            url
+          }
         }
       },
       userId,
-    postedBy->{
-      _id,
-      userName,
-      image
-    },
-likes,
-    comments[]{
-      comment,
-      _key,
       postedBy->{
-      _id,
-      userName,
-      image
-    },
-    }
+        _id,
+        userName,
+        image
+      },
+    likes,
+    viewCount,
   }`;
   return query;
 };
@@ -111,32 +111,31 @@ export const allUsersQuery = () => {
 };
 
 export const userCreatedPostsQuery = (userId: string | string[]) => {
-  const query = `*[ _type == 'post' && userId == '${userId}'] | order(_createdAt desc){
-    _id,
+  const query = `*[ _type == "post" && userId == '${userId}'] | order(_createdAt desc){
+       _id,
      caption,
-       video{
-        asset->{
-          _id,
-          url
+     createdAt,
+     uploadVideo{
+        video{
+          asset ->{
+            _id,
+            url
+          }
+        }, 
+        thumbnail{
+          asset ->{
+            url
+          }
         }
       },
       userId,
-    postedBy->{
-      _id,
-      userName,
-      image
-    },
- likes,
-
-    comments[]{
-      comment,
-      _key,
       postedBy->{
-      _id,
-      userName,
-      image
-    },
-    }
+        _id,
+        userName,
+        image
+      },
+    likes,
+    viewCount,
   }`;
 
   return query;
@@ -144,31 +143,30 @@ export const userCreatedPostsQuery = (userId: string | string[]) => {
 
 export const userLikedPostsQuery = (userId: string | string[]) => {
   const query = `*[_type == 'post' && '${userId}' in likes[]._ref ] | order(_createdAt desc) {
-    _id,
+        _id,
      caption,
-       video{
-        asset->{
-          _id,
-          url
+     createdAt,
+     uploadVideo{
+        video{
+          asset ->{
+            _id,
+            url
+          }
+        }, 
+        thumbnail{
+          asset ->{
+            url
+          }
         }
       },
       userId,
-    postedBy->{
-      _id,
-      userName,
-      image
-    },
- likes,
-
-    comments[]{
-      comment,
-      _key,
       postedBy->{
-      _id,
-      userName,
-      image
-    },
-    }
+        _id,
+        userName,
+        image
+      },
+    likes,
+    viewCount,
   }`;
 
   return query;

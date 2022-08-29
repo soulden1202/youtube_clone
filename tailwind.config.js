@@ -23,6 +23,7 @@ module.exports = {
         900: "900px",
         458: "458px",
       },
+
       top: {
         " 50%": "50%",
       },
@@ -32,6 +33,7 @@ module.exports = {
       },
       colors: {
         primary: "rgb(22, 24, 35)",
+        sidebar: "#141414",
       },
       height: {
         "88vh": "88vh",

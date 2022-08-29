@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@material-tailwind/react": "^1.0.6",
     "@mui/joy": "^5.0.0-alpha.35",
+    "@mui/material": "^5.10.2",
     "@react-oauth/google": "^0.2.6",
     "@sanity/client": "^3.3.0",
     "axios": "^0.27.2",
@@ -21,6 +22,7 @@
     "material-ui-chip-input": "^2.0.0-beta.2",
     "moment": "^2.29.3",
     "next": "12.1.6",
+    "nprogress": "^0.2.0",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-google-login": "^5.2.2",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.35",
+    "@types/nprogress": "^0.2.0",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.4",
     "@types/react-tag-input": "^6.1.3",
