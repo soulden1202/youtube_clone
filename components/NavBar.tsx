@@ -8,7 +8,7 @@ import {
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BiSearch } from "react-icons/bi";
+
 import { IoMdAdd } from "react-icons/io";
 import { BsFillMoonFill } from "react-icons/bs";
 import { BsFillSunFill } from "react-icons/bs";
@@ -20,14 +20,6 @@ import useAuthStore from "../store/authStore";
 import { IUser } from "../types";
 import { Button, Input } from "@material-tailwind/react";
 import SideBar from "./SideBar";
-import { BASE_URL } from "../utils";
-
-import {
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  TextField,
-} from "@mui/material";
 
 interface IProps {
   isDarkMode: boolean;
@@ -127,7 +119,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
       <div>
         {user ? (
           <div className="flex gap-5 md:gap-10">
-            <Link href="/upload">
+            <Link href="/Upload">
               <button className="border-2 px-2 md:px-4 text-md font-semibold flex items-center gap-2">
                 <IoMdAdd className="text-xl text-black dark:text-white"></IoMdAdd>
                 <span className="hidden md:block text-black dark:text-white">

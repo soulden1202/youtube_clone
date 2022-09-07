@@ -18,7 +18,6 @@ interface IProps {
 const VideoCard: NextPage<IProps> = ({ post }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const post_img = post.postedBy.image;
   const data = { id: post._id };
 
   const handlePostClick = () => {

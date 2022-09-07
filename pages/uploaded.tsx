@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 
 import { Video } from "../types";
 import { BASE_URL } from "../utils";
-import useAuthStore from "../store/authStore";
 
 import VideoCard from "../components/VideoCard";
 import NoResults from "../components/NoResults";
@@ -22,8 +21,11 @@ const Uploaded = ({ uploaedVideos }: IProps) => {
       <div className="flex flex-wrap gap-[15px] videos ">
         {uploaedVideos.length ? (
           uploaedVideos.map((video: Video) => (
-            <div className=" object-fill xl:w-[32%] lg:w-[45%] md:w-[45%]">
-              <VideoCard post={video} key={video._id} />
+            <div
+              className=" object-fill xl:w-[32%] lg:w-[45%] md:w-[45%]"
+              key={video._id}
+            >
+              <VideoCard post={video} />
             </div>
           ))
         ) : (

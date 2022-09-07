@@ -22,8 +22,11 @@ const Liked = ({ likeVideo }: IProps) => {
       <div className="flex flex-wrap gap-[15px] videos ">
         {likeVideo.length ? (
           likeVideo.map((video: Video) => (
-            <div className=" object-fill xl:w-[32%] lg:w-[45%] md:w-[45%]">
-              <VideoCard post={video} key={video._id} />
+            <div
+              className=" object-fill xl:w-[32%] lg:w-[45%] md:w-[45%]"
+              key={video._id}
+            >
+              <VideoCard post={video} />
             </div>
           ))
         ) : (

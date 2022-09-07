@@ -21,9 +21,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
   const data = { id: post._id };
   const router = useRouter();
 
-  const changeVideo = () => {
-    router.push(`/detail/${post._id}`);
-  };
+  const changeVideo = () => {};
 
   return (
     <div className="flex flex-row hover:bg-gray-700 rounded-sm">
