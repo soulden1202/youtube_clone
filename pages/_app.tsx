@@ -3,11 +3,9 @@ import type { AppProps } from "next/app";
 import { useState, useEffect } from "react";
 
 import NavBar from "../components/NavBar";
-import SideBar from "../components/SideBar";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "nprogress/nprogress.css";
-import Router from "next/router";
 import dynamic from "next/dynamic";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

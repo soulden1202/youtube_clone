@@ -65,7 +65,12 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
         },
       };
 
-      setallComments([...allComments, temp]);
+      if (allComments) {
+        setallComments([...allComments, temp]);
+      } else {
+        setallComments([temp]);
+      }
+
       setComment("");
 
       await axios.put(`${BASE_URL}/api/post/${post._id}`, {

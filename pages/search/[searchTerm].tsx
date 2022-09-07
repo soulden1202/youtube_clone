@@ -1,10 +1,9 @@
 import axios from "axios";
 
-import React, { useRef, useState } from "react";
+import React from "react";
 
 import { Video } from "../../types";
 import { BASE_URL } from "../../utils";
-import useAuthStore from "../../store/authStore";
 
 import VideoCard from "../../components/VideoCard";
 import NoResults from "../../components/NoResults";

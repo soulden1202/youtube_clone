@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { client } from "../../utils/client";
 import { uuid } from "uuidv4";
-import { postDetailQuery } from "../../utils/queries";
 
 export default async function handler(
   req: NextApiRequest,

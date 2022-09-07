@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { client } from "../../utils/client";
-import { allPostsQuery, topicPostsQuery } from "../../utils/queries";
+import { topicPostsQuery } from "../../utils/queries";
 
 export default async function handler(
   req: NextApiRequest,
