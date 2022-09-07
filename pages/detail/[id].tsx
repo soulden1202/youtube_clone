@@ -78,7 +78,6 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
   if (!post) {
     return <ReactLoading type="spinningBubbles" color={"#808080"} />;
   }
-  const videoRef = useRef(null);
 
   return (
     <div className="bg-white dark:bg-black w-full h-full">
@@ -86,7 +85,6 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
         <div className="mt-0 flex flex-col gap-10 overflow-hidden h-full videos flex-1 object-fill">
           <div className="xl:w-[100%] w-[95%] ">
             <video
-              ref={videoRef}
               autoPlay
               className=" flex mx-1 h-[400px] lg:h-[600px] w-full"
               src={post.uploadVideo.video.asset.url}
@@ -217,17 +215,17 @@ export const getServerSideProps = async ({
   params: { id: string };
 }) => {
   const { data } = await axios.get(`${BASE_URL}/api/post/${id}`);
-  const params = {
+  const dataToRquest = {
     tags: data.tags,
     id: data._id,
   };
   const recomendation = await axios.post(
     `${BASE_URL}/api/recomendation`,
-    params
+    dataToRquest
   );
 
   return {
-    props: { postDetails: data, recommendVideos: recomendation.data },
+    props: { postDetails: data, recommendVideos: recomendation.data, key: id },
   };
 };
 

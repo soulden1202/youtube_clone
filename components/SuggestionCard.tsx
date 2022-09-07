@@ -19,13 +19,14 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const data = { id: post._id };
+  const router = useRouter();
 
-  const handlePostClick = () => {
-    axios.patch(`${BASE_URL}/api/post`, data);
+  const changeVideo = () => {
+    router.push(`/detail/${post._id}`);
   };
 
   return (
-    <div className="flex flex-row ">
+    <div className="flex flex-row hover:bg-gray-700 rounded-sm">
       <div className="flex flex-col object-cover w-[50%]">
         <div
           className="rounded-3xl object-cover h-full w-full"
@@ -36,16 +37,14 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
             videoRef?.current?.load();
           }}
         >
-          <Link href={`/detail/${post._id}`}>
-            <video
-              ref={videoRef}
-              className="bg-white dark:bg-black flex mx-1 rounded-2xl cursor-pointer w-full h-[100px] border-2 border-gray-500"
-              src={post.uploadVideo.video.asset.url}
-              poster={post.uploadVideo.thumbnail.asset.url}
-              muted
-              onClick={handlePostClick}
-            ></video>
-          </Link>
+          <video
+            ref={videoRef}
+            className="bg-white dark:bg-black flex mx-1 rounded-2xl w-full h-[100px] border-2 border-gray-500"
+            src={post.uploadVideo.video.asset.url}
+            poster={post.uploadVideo.thumbnail.asset.url}
+            muted
+          ></video>
+
           <div className="flex justify-start text-baclk dark:text-white ml-3">
             {videoRef?.current?.duration && (
               <p>
@@ -56,36 +55,34 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="mt-1 ml-3  w-[50%]">
+      <div className="mt-1 ml-3 w-[50%]" onClick={changeVideo}>
         <div className="flex gap-3 cursor-pointer font-semibold rounded">
           <div>
-            <Link href="/">
-              <div className="flex flex-col  gap-1">
-                <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
-                  {post.caption}
+            <div className="flex flex-col  gap-1">
+              <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
+                {post.caption}
+              </p>
+              <div className=" flex md:flex-col gap-1">
+                <p className="flex gap-1 font-medium text-xs items-center text-primary dark:text-white">
+                  {post.postedBy.userName} {` `}
+                  <GoVerified className="text-blue-400 text-md" />
                 </p>
-                <div className=" flex md:flex-col gap-1">
-                  <p className="flex gap-1 font-medium text-xs items-center text-primary dark:text-white">
-                    {post.postedBy.userName} {` `}
-                    <GoVerified className="text-blue-400 text-md" />
+                <div className="flex flex-row gap-1 ">
+                  <p className="  text-xsfont-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
+                    {post.viewCount > 1
+                      ? ` ${post.viewCount} views`
+                      : ` ${post.viewCount} view`}
                   </p>
-                  <div className="flex flex-row gap-1 ">
-                    <p className="  text-xsfont-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
-                      {post.viewCount > 1
-                        ? ` ${post.viewCount} views`
-                        : ` ${post.viewCount} view`}
-                    </p>
-                    <span className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300">
-                      {" "}
-                      -{" "}
-                    </span>
-                    <p className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
-                      {moment(`${post.createdAt}`).fromNow()}
-                    </p>
-                  </div>
+                  <span className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300">
+                    {" "}
+                    -{" "}
+                  </span>
+                  <p className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
+                    {moment(`${post.createdAt}`).fromNow()}
+                  </p>
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
