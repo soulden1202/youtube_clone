@@ -111,7 +111,7 @@ const Comments = ({ comment, comments, addComment, setComment }: IProps) => {
               .slice(0)
               .reverse()
               .map((comment) => (
-                <div className="flex flex-row w-full gap-5">
+                <div className="flex flex-row w-full gap-5" key={comment._key}>
                   <div>
                     <>
                       {comment?.postedBy?.image && (
