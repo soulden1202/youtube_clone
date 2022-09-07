@@ -9,7 +9,6 @@ export default async function handler(
   if (req.method === "POST") {
     try {
       const { tags, id } = req.body;
-      console.log(tags);
       const query = topicPostsQuery(tags, id);
 
       const data = await client.fetch(query);

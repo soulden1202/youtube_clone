@@ -25,8 +25,6 @@ export default async function handler(
 
     const time = new Date().toISOString();
 
-    console.log(time);
-
     const data = await client
       .patch(id)
       .setIfMissing({ comments: [] })

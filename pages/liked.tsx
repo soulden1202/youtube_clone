@@ -14,7 +14,6 @@ interface IProps {
 }
 
 const Liked = ({ likeVideo }: IProps) => {
-  console.log(likeVideo);
   return (
     <div>
       <div className="dark:text-white ml-10 text-2xl font-bold mb-3">
