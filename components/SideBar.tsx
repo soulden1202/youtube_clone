@@ -1,24 +1,19 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
-import { NextPage } from "next";
-import { useRouter } from "next/router";
+
 import Link from "next/link";
-import GoogleLogin from "react-google-login";
+
 import {
-  AiFillHome,
   AiOutlineMenu,
   AiOutlineHome,
   AiOutlineLike,
   AiOutlinePlayCircle,
 } from "react-icons/ai";
-import { ImCancelCircle } from "react-icons/im";
-import Discover from "./Discover";
-import SuggestedAccounts from "./SuggestedAccounts";
+
 import useAuthStore from "../store/authStore";
-import Footer from "./Footer";
 
 import Logo from "../utils/extreme-11.png";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 interface IProps {
   open: boolean;

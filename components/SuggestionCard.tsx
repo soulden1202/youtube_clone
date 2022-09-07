@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { IRecomendation, Video } from "../types";
 import { NextPage } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { HiVolumeUp, HiVolumeOff } from "react-icons/hi";
-import { BsFillPlayFill, BsFillPauseFill } from "react-icons/bs";
+
 import { GoVerified } from "react-icons/go";
 import moment from "moment";
-import axios from "axios";
 import { useRouter } from "next/router";
-import { BASE_URL } from "../utils";
 
 interface IProps {
   post: IRecomendation;
