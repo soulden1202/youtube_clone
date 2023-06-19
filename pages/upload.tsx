@@ -7,8 +7,6 @@ import { SanityAssetDocument } from "@sanity/client";
 import ReactLoading from "react-loading";
 import { TiDeleteOutline } from "react-icons/ti";
 
-import ChipInput from "material-ui-chip-input";
-
 import useAuthStore from "../store/authStore";
 import { client } from "../utils/client";
 import { BASE_URL } from "../utils";
@@ -35,7 +33,13 @@ const Upload = () => {
 
   const uploadVideo = async (e: any) => {
     const selectedFile = e.target.files[0];
-    const fileTypes = ["video/mp4", "video/webm", "video/ogg"];
+    console.log(selectedFile.type);
+    const fileTypes = [
+      "video/mp4",
+      "video/webm",
+      "video/ogg",
+      "video/x-matroska",
+    ];
 
     if (fileTypes.includes(selectedFile?.type)) {
       setisLoading(true);
@@ -255,9 +259,7 @@ const Upload = () => {
               <label className="text-md font-medium dark:text-white">
                 Tags
               </label>
-              <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white">
-                <ChipInput onChange={(chips) => handleChange(chips)} />
-              </div>
+              <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"></div>
 
               <div className="flex gap-6 mt-10">
                 <button
