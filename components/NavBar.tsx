@@ -119,7 +119,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
       <div>
         {user ? (
           <div className="flex gap-5 md:gap-10">
-            <Link href="/Upload">
+            <Link href="/upload">
               <button className="border-2 px-2 md:px-4 text-md font-semibold flex items-center gap-2">
                 <IoMdAdd className="text-xl text-black dark:text-white"></IoMdAdd>
                 <span className="hidden md:block text-black dark:text-white">

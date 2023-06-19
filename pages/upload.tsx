@@ -10,7 +10,7 @@ import { TiDeleteOutline } from "react-icons/ti";
 import useAuthStore from "../store/authStore";
 import { client } from "../utils/client";
 import { BASE_URL } from "../utils";
-const upload = () => {
+const Upload = () => {
   const [isLoading, setisLoading] = useState(false);
   const [isLoadingThumbnail, setisLoadingThumbnail] = useState(false);
   const [videoAsset, setvideoAsset] = useState<
@@ -285,4 +285,4 @@ const upload = () => {
   );
 };
 
-export default upload;
+export default Upload;
