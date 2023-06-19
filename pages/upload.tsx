@@ -7,8 +7,6 @@ import { SanityAssetDocument } from "@sanity/client";
 import ReactLoading from "react-loading";
 import { TiDeleteOutline } from "react-icons/ti";
 
-import ChipInput from "material-ui-chip-input";
-
 import useAuthStore from "../store/authStore";
 import { client } from "../utils/client";
 import { BASE_URL } from "../utils";
@@ -261,9 +259,7 @@ const Upload = () => {
               <label className="text-md font-medium dark:text-white">
                 Tags
               </label>
-              <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white">
-                <ChipInput onChange={(chips) => handleChange(chips)} />
-              </div>
+              <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"></div>
 
               <div className="flex gap-6 mt-10">
                 <button
