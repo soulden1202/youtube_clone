@@ -33,5 +33,17 @@ export default async function handler(
       .catch(() => {
         res.status(500).json("Error updating video");
       });
+  } else if (req.method === "DELETE") {
+    const { id } = req.body;
+
+    console.log(id);
+    client
+      .delete(id)
+      .then(() => {
+        res.status(200).json("Video is deleted");
+      })
+      .catch(() => {
+        res.status(500).json("Can't delete video");
+      });
   }
 }

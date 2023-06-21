@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { Video } from "../types";
 import { BASE_URL } from "../utils";
@@ -8,25 +8,74 @@ import { BASE_URL } from "../utils";
 import VideoCard from "../components/VideoCard";
 import NoResults from "../components/NoResults";
 import VideoList from "../components/VideoList";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IProps {
   uploaedVideos: Video[];
 }
 
 const Uploaded = ({ uploaedVideos }: IProps) => {
+  const [videos, setVideos] = useState(uploaedVideos);
+  const handleDeleteVideoFromAccount = async (postId: string) => {
+    const id = toast.loading("Deleting your video", {
+      position: "bottom-right",
+
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      isLoading: true,
+    });
+    await axios
+      .delete(`${BASE_URL}/api/post`, {
+        data: { id: postId },
+      })
+      .then((response) => {
+        toast.update(id, {
+          render: "Your video has been deleted",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+        setVideos(videos.filter((video) => video._id !== postId));
+      })
+      .catch((error) => {
+        toast.update(id, {
+          render: error.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+      });
+  };
+
+  function timeout(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   return (
     <div className="flex w-full h-full flex-col">
+      <ToastContainer />
       <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
         Video Uploaded By You
       </div>
       <div className="flex flex-col w-full h-full items-center  gap-[30px] videos ">
-        {uploaedVideos.length ? (
-          uploaedVideos.map((video: Video) => (
+        {videos.length ? (
+          videos.map((video: Video) => (
             <div
               className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
               key={video._id}
             >
-              <VideoList post={video} isLiked={false} />
+              <VideoList
+                post={video}
+                isCurrentOnLikedPage={false}
+                handleRemove={handleDeleteVideoFromAccount}
+              />
             </div>
           ))
         ) : (
