@@ -49,10 +49,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
     >
       <div className={darkmode}>
-        <div className="bg-white dark:bg-black w-full h-[110vh]">
+        <div className="bg-white dark:bg-black w-full h-full">
           <NavBar isDarkMode={isDarkMode} setisDarkMode={setisDarkMode} />
-          <div className="flex gap-5">
-            <div className="h-[92vh] overflow-hidden "></div>
+          <div className="flex gap-5 ">
             <div className="mt-4 flex flex-col gap-10 overflow-auto h-[88vh] videos flex-1 ">
               <TopProgressBar />
               <Component {...pageProps} />

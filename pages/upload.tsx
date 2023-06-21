@@ -171,7 +171,7 @@ const Upload = () => {
           </div>
         ) : (
           <div>
-            <div>
+            <div className="flex flex-col items-center mb-5">
               <p className="dark:text-white text-2xl font-bold">Upload Video</p>
               <p className="text-md text-gray-400 ">
                 {" "}

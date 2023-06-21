@@ -7,6 +7,7 @@ import { BASE_URL } from "../utils";
 
 import VideoCard from "../components/VideoCard";
 import NoResults from "../components/NoResults";
+import VideoList from "../components/VideoList";
 
 interface IProps {
   uploaedVideos: Video[];
@@ -14,18 +15,18 @@ interface IProps {
 
 const Uploaded = ({ uploaedVideos }: IProps) => {
   return (
-    <div>
-      <div className="dark:text-white ml-10 text-2xl font-bold mb-3">
+    <div className="flex w-full h-full flex-col">
+      <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
         Video Uploaded By You
       </div>
-      <div className="flex flex-wrap gap-[15px] videos ">
+      <div className="flex flex-col w-full h-full items-center  gap-[30px] videos ">
         {uploaedVideos.length ? (
           uploaedVideos.map((video: Video) => (
             <div
-              className=" object-fill xl:w-[32%] lg:w-[45%] md:w-[45%]"
+              className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
               key={video._id}
             >
-              <VideoCard post={video} />
+              <VideoList post={video} isLiked={false} />
             </div>
           ))
         ) : (
