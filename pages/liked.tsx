@@ -14,6 +14,7 @@ interface IProps {
 }
 
 const Liked = ({ likeVideo }: IProps) => {
+  const handleRemoveFromLikedList = async (postId: string) => {};
   return (
     <div className="flex w-full h-full flex-col">
       <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
@@ -26,7 +27,11 @@ const Liked = ({ likeVideo }: IProps) => {
               className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
               key={video._id}
             >
-              <VideoList post={video} isLiked={true} />
+              <VideoList
+                post={video}
+                isCurrentOnLikedPage={true}
+                handleRemove={handleRemoveFromLikedList}
+              />
             </div>
           ))
         ) : (

@@ -14,11 +14,16 @@ import "rc-dropdown/assets/index.css";
 
 interface IProps {
   post: Video;
-  isLiked: boolean;
+  isCurrentOnLikedPage: boolean;
+  handleRemove: (postId: string) => Promise<void>;
 }
 
-const VideoList: NextPage<IProps> = ({ post, isLiked }) => {
-  const menu1 = (
+const VideoList: NextPage<IProps> = ({
+  post,
+  isCurrentOnLikedPage,
+  handleRemove,
+}) => {
+  const dotMenuForUploadedPage = (
     <Menu onSelect={onSelect} className="w-[100px] h-[50px]">
       <MenuItem
         className="h-[25px] cursor-pointer hover:bg-blue-300 justify-center text-center mt-2 flex items-center "
@@ -36,7 +41,7 @@ const VideoList: NextPage<IProps> = ({ post, isLiked }) => {
     </Menu>
   );
 
-  const menu2 = (
+  const dotMenuForLikedPage = (
     <Menu onSelect={onSelect} className="h-[50px]">
       <MenuItem
         className="h-[25px] cursor-pointer hover:bg-blue-300 justify-center text-center mt-2 flex items-center "
@@ -60,11 +65,12 @@ const VideoList: NextPage<IProps> = ({ post, isLiked }) => {
     axios.patch(`${BASE_URL}/api/post`, data);
   };
 
-  function onSelect(info: any) {
+  async function onSelect(info: any) {
     if (info.key == "edit") {
       console.log("edit");
     } else if (info.key == "delete") {
-      console.log("deleting");
+      //this function can be called if we are currently on uploaded videos page
+      handleRemove(data.id);
     }
   }
 
@@ -112,7 +118,11 @@ const VideoList: NextPage<IProps> = ({ post, isLiked }) => {
         <div className="h-full mr-2">
           <Dropdown
             trigger={["click"]}
-            overlay={isLiked ? menu2 : menu1}
+            overlay={
+              isCurrentOnLikedPage
+                ? dotMenuForLikedPage
+                : dotMenuForUploadedPage
+            }
             animation="slide-up"
           >
             <button className="h-[20px] w-[20px] mt-2">
