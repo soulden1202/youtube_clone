@@ -69,19 +69,7 @@ const VideoList: NextPage<IProps> = ({
     if (info.key == "edit") {
       console.log("edit");
     } else if (info.key == "delete") {
-      //   const id = toast.loading("Please wait...");
-      //   const timer = setTimeout(() => {
-      //     console.log("This will run after 1 second!");
-      //   }, 1000);
-      //   clearTimeout(timer);
-      //   //  await axios.delete(`${BASE_URL}/api/post`, {
-      //   //     data: data,
-      //   //   });
-      //   toast.update(id, {
-      //     render: "All is good",
-      //     type: "success",
-      //     isLoading: false,
-      //   });
+      //this function can be called if we are currently on uploaded videos page
       handleRemove(data.id);
     }
   }
