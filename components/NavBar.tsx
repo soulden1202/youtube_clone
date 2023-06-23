@@ -20,6 +20,7 @@ import useAuthStore from "../store/authStore";
 import { IUser } from "../types";
 import { Button, Input } from "@material-tailwind/react";
 import SideBar from "./SideBar";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 interface IProps {
   isDarkMode: boolean;
@@ -28,9 +29,9 @@ interface IProps {
 
 const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
   const { userProfile, addUser, removeUser } = useAuthStore();
-  const [user, setUser] = useState<IUser | null>();
   const [isFocused, setisFocused] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [searchTerms, setsearchTerms] = useState("");
 
@@ -39,9 +40,13 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     setOpen(true);
   };
 
+  console.log(userProfile);
+
   useEffect(() => {
-    setUser(userProfile);
-  }, [userProfile]);
+    if (session) {
+      addUser(session.user);
+    }
+  }, [session]);
 
   const handleSearch = (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -117,7 +122,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
       />
 
       <div>
-        {user ? (
+        {session ? (
           <div className="flex gap-5 md:gap-10">
             <Link href="/upload">
               <button className="border-2 px-2 md:px-4 text-md font-semibold flex items-center gap-2">
@@ -127,14 +132,14 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
                 </span>
               </button>
             </Link>
-            {user.image && (
+            {session.user?.image && (
               <Link href="/">
                 <>
                   <Image
                     width={40}
                     height={40}
                     className="rounded-full cursor-pointer"
-                    src={user.image}
+                    src={session.user?.image}
                     alt="profile photo"
                   ></Image>
                 </>
@@ -143,7 +148,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
             <button
               type="button"
               onClick={() => {
-                googleLogout();
+                signOut();
                 removeUser();
               }}
               className="text-red-500 px-2 dark:text-red-700 border-2 rounded dark:border-white"
@@ -152,10 +157,15 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
             </button>
           </div>
         ) : (
-          <GoogleLogin
-            onSuccess={(res) => createOrGetUser(res, addUser)}
-            onError={() => console.log("Error")}
-          />
+          <button
+            type="button"
+            onClick={() => {
+              signIn("google");
+            }}
+            className="text-red-500 px-2 dark:text-red-700 border-2 rounded dark:border-white"
+          >
+            Login
+          </button>
         )}
       </div>
     </div>

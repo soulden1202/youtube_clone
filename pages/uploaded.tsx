@@ -26,7 +26,7 @@ const Uploaded = ({ uploaedVideos }: IProps) => {
   const { id } = router.query;
 
   useEffect(() => {
-    if (id !== userProfile?._id || !userProfile) {
+    if (id !== userProfile?.id || !userProfile) {
       router.push(`/`);
     } else {
       setisUser(true);

@@ -28,7 +28,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
   const handleLike = async (like: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/like`, {
-        userId: userProfile._id,
+        userId: userProfile.id,
         postId: post._id,
         like,
       });
@@ -40,7 +40,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
   const handleDislike = async (dislike: boolean) => {
     if (userProfile) {
       const { data } = await axios.put(`${BASE_URL}/api/dislike`, {
-        userId: userProfile._id,
+        userId: userProfile.id,
         postId: post._id,
         dislike,
       });
@@ -58,7 +58,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
         _key: "",
         commentAt: new Date().toISOString(),
         postedBy: {
-          _id: userProfile._id,
+          _id: userProfile.id,
           _ref: userProfile._ref,
           userName: userProfile.userName,
           image: userProfile.image,
@@ -74,7 +74,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
       setComment("");
 
       await axios.put(`${BASE_URL}/api/post/${post._id}`, {
-        userId: userProfile._id,
+        userId: userProfile.id,
         comment,
       });
     }

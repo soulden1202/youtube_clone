@@ -12,8 +12,7 @@ const Like = ({ likes, handleLike, handleUnlike }: IProps) => {
   const { userProfile }: { userProfile: any } = useAuthStore();
 
   const [alreadyLiked, setalreadyLiked] = useState(false);
-  const filterLike = likes?.filter((item) => item._ref === userProfile?._id);
-
+  const filterLike = likes?.filter((item) => item._ref === userProfile?.id);
 
   useEffect(() => {
     if (filterLike?.length > 0) {
