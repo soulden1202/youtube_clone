@@ -14,7 +14,7 @@ const Dislike = ({ handleDislike, handleUndislike, dislikes }: IProps) => {
   const [alreadyDisliked, setalreadyDisliked] = useState(false);
 
   const filterDislike = dislikes?.filter(
-    (item) => item._ref === userProfile?._id
+    (item) => item._ref === userProfile?.id
   );
 
   useEffect(() => {

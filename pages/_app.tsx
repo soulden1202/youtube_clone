@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 import NavBar from "../components/NavBar";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { SessionProvider } from "next-auth/react";
 
 import "nprogress/nprogress.css";
 import dynamic from "next/dynamic";
@@ -45,9 +46,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }
 
   return (
-    <GoogleOAuthProvider
-      clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
-    >
+    <SessionProvider session={pageProps.session}>
       <div className={darkmode}>
         <div className="bg-white dark:bg-black w-full h-full">
           <NavBar isDarkMode={isDarkMode} setisDarkMode={setisDarkMode} />
@@ -59,7 +58,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           </div>
         </div>
       </div>
-    </GoogleOAuthProvider>
+    </SessionProvider>
   );
 };
 

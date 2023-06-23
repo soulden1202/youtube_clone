@@ -78,7 +78,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
                   href={{
                     pathname: "/liked",
                     query: {
-                      id: userProfile._id,
+                      id: userProfile.id,
                     },
                   }}
                 >
@@ -101,7 +101,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
                   href={{
                     pathname: "/uploaded",
                     query: {
-                      id: userProfile._id,
+                      id: userProfile.id,
                     },
                   }}
                 >
