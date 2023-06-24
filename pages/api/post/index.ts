@@ -3,14 +3,15 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { client } from "../../../utils/client";
 import { allPostsQuery, postDetailQuery } from "../../../utils/queries";
 
-import useAuthStore from "../../../store/authStore";
+import { authOptions } from "../auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   //todo: add auth check for all requests
-
+  const session = await getServerSession(req, res, authOptions);
   if (req.method === "GET") {
     try {
       const query = allPostsQuery();
@@ -22,8 +23,14 @@ export default async function handler(
       console.log(error);
     }
   } else if (req.method === "POST") {
-    const docs = req.body;
-    client.create(docs).then(() => res.status(201).json("Video Created"));
+    if (!session) {
+      res.status(404).json("User not found");
+    } else if (session.user.id !== req.body.userId) {
+      res.status(401).json("Unauthorized");
+    } else {
+      const docs = req.body;
+      client.create(docs).then(() => res.status(201).json("Video Created"));
+    }
   } else if (req.method === "PATCH") {
     const { id } = req.body;
 
@@ -40,38 +47,29 @@ export default async function handler(
   } else if (req.method === "DELETE") {
     const { id, userProfile } = req.body;
 
-    useAuthStore.getState().userProfile;
+    if (!userProfile || !session) {
+      res.status(404).json("User not found");
+    } else if (userProfile.id !== session.user.id) {
+      res.status(401).json("Unauthorized");
+    } else {
+      const document = await client.getDocument(id);
 
-    const userProfile1 = useAuthStore.subscribe(
-      (state: any) => state.userProfile
-    );
-
-    console.log(userProfile1);
-    console.log(id);
-
-    res.status(200).json;
-
-    // if (!userProfile) {
-    //   res.status(404).json("User not found");
-    // }
-
-    // const document = await client.getDocument(id);
-
-    // if (!document) {
-    //   res.status(404).json("Video not found");
-    // } else {
-    //   if (userProfile.id !== document.userId) {
-    //     res.status(409).json("Failed to delete");
-    //   } else {
-    //     client
-    //       .delete(id)
-    //       .then(() => {
-    //         res.status(200).json("Video is deleted");
-    //       })
-    //       .catch(() => {
-    //         res.status(500).json("Can't delete video");
-    //       });
-    //   }
-    // }
+      if (!document) {
+        res.status(404).json("Video not found");
+      } else {
+        if (userProfile.id !== document.userId) {
+          res.status(409).json("Failed to delete");
+        } else {
+          client
+            .delete(id)
+            .then(() => {
+              res.status(200).json("Video is deleted");
+            })
+            .catch(() => {
+              res.status(500).json("Can't delete video");
+            });
+        }
+      }
+    }
   }
 }

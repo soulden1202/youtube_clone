@@ -10,6 +10,8 @@ import NoResults from "../components/NoResults";
 import VideoList from "../components/VideoList";
 import useAuthStore from "../store/authStore";
 import { useRouter } from "next/router";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 interface IProps {
   likeVideo: Video[];
@@ -17,23 +19,15 @@ interface IProps {
 
 const Liked = ({ likeVideo }: IProps) => {
   const handleRemoveFromLikedList = async (postId: string) => {};
-  const [isUser, setisUser] = useState(false);
+
   const { userProfile }: { userProfile: any } = useAuthStore();
   const router = useRouter();
 
   const { id } = router.query;
 
-  useEffect(() => {
-    if (id !== userProfile?.id || !userProfile) {
-      router.push(`/`);
-    } else {
-      setisUser(true);
-    }
-  }, []);
-
   return (
     <>
-      {isUser && (
+      {userProfile && (
         <div className="flex w-full h-full flex-col">
           <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
             Your Liked Videos
@@ -62,10 +56,19 @@ const Liked = ({ likeVideo }: IProps) => {
   );
 };
 
-export const getServerSideProps = async (context: {
-  query: { id: string };
-}) => {
+export const getServerSideProps = async (context: any) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
   let id: string = context.query.id;
+
+  if (!session || session.user.id !== id) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
   const likeVideo = await axios.get(`${BASE_URL}/api/liked/${id}`);
 
   return {
