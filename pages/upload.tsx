@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
@@ -36,6 +36,12 @@ const Upload = () => {
   const router = useRouter();
 
   const { userProfile }: { userProfile: any } = useAuthStore();
+
+  useEffect(() => {
+    if (!userProfile) {
+      router.push("/");
+    }
+  }, [userProfile]);
 
   const uploadVideo = async (e: any) => {
     const selectedFile = e.target.files[0];
@@ -144,10 +150,10 @@ const Upload = () => {
             },
           },
         },
-        userId: userProfile?._id,
+        userId: userProfile?.id,
         postedBy: {
           _type: "postedBy",
-          _ref: userProfile?._id,
+          _ref: userProfile?.id,
         },
         description,
         tags: tags,
@@ -163,24 +169,28 @@ const Upload = () => {
   };
 
   return (
-    <div className="w-full h-full ">
-      <div className="bg-white dark:bg-black rounded-lg">
-        {uploading ? (
-          <div className="flex fixed items-center justify-center w-full h-[80%] ">
-            <ReactLoading type="spinningBubbles" color={"#808080"} />
-          </div>
-        ) : (
-          <div>
-            <div className="flex flex-col items-center mb-5">
-              <p className="dark:text-white text-2xl font-bold">Upload Video</p>
-              <p className="text-md text-gray-400 ">
-                {" "}
-                Post a video to your account
-              </p>
-            </div>
-            <div className="flex md:flex-row flex-col md:gap-8 gap-3 md:items-center justify-center">
-              <div
-                className={`border-dashed rounded-xl border-4 border-gray-200 
+    <>
+      {userProfile && (
+        <div className="w-full h-full ">
+          <div className="bg-white dark:bg-black rounded-lg">
+            {uploading ? (
+              <div className="flex fixed items-center justify-center w-full h-[80%] ">
+                <ReactLoading type="spinningBubbles" color={"#808080"} />
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col items-center mb-5">
+                  <p className="dark:text-white text-2xl font-bold">
+                    Upload Video
+                  </p>
+                  <p className="text-md text-gray-400 ">
+                    {" "}
+                    Post a video to your account
+                  </p>
+                </div>
+                <div className="flex md:flex-row flex-col md:gap-8 gap-3 md:items-center justify-center">
+                  <div
+                    className={`border-dashed rounded-xl border-4 border-gray-200 
           dark:border-gray-400 flex flex-col justify-center items-centered
            outline-none mt-10 w-[360px] md:w-[560px] h-[460px] p-10 
            align-middle
@@ -190,148 +200,155 @@ const Upload = () => {
             dark:hover:border-red-400 dark:hover:bg-gray-800 cursor-pointer`
            }
             `}
-              >
-                {isLoading ? (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <ReactLoading type="spinningBubbles" color={"#808080"} />
-                  </div>
-                ) : (
-                  <div>
-                    {videoAsset ? (
-                      <div>
-                        <div className="flex float-right mb-1">
-                          <button
-                            className="text-red-500 md:text-[45px]"
-                            onClick={handleRemove}
-                          >
-                            <TiDeleteOutline></TiDeleteOutline>
-                          </button>
-                        </div>
-                        <div className="mt-1 h-[260px]">
-                          <video
-                            src={videoAsset.url}
-                            controls
-                            className="rounded"
-                          ></video>
-                        </div>
+                  >
+                    {isLoading ? (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <ReactLoading
+                          type="spinningBubbles"
+                          color={"#808080"}
+                        />
                       </div>
                     ) : (
-                      <label className={`${!videoAsset && `cursor-pointer`}`}>
-                        <div className="flex flex-col items-center justify-center h-full">
-                          <div className="flex flex-col items-center justify-center">
-                            <p className="font-bold text-xl ">
-                              <FaCloudUploadAlt className="text-6xl text-gray-300" />
-                            </p>
-                            <p className="font-semibold text-xl dark:text-white">
-                              Upload Video
-                            </p>
+                      <div>
+                        {videoAsset ? (
+                          <div>
+                            <div className="flex float-right mb-1">
+                              <button
+                                className="text-red-500 md:text-[45px]"
+                                onClick={handleRemove}
+                              >
+                                <TiDeleteOutline></TiDeleteOutline>
+                              </button>
+                            </div>
+                            <div className="mt-1 h-[260px]">
+                              <video
+                                src={videoAsset.url}
+                                controls
+                                className="rounded"
+                              ></video>
+                            </div>
                           </div>
-                        </div>
-                        <input
-                          type="file"
-                          name="upload-video"
-                          onChange={uploadVideo}
-                          className="w-0 h-0"
-                        ></input>
-                      </label>
+                        ) : (
+                          <label
+                            className={`${!videoAsset && `cursor-pointer`}`}
+                          >
+                            <div className="flex flex-col items-center justify-center h-full">
+                              <div className="flex flex-col items-center justify-center">
+                                <p className="font-bold text-xl ">
+                                  <FaCloudUploadAlt className="text-6xl text-gray-300" />
+                                </p>
+                                <p className="font-semibold text-xl dark:text-white">
+                                  Upload Video
+                                </p>
+                              </div>
+                            </div>
+                            <input
+                              type="file"
+                              name="upload-video"
+                              onChange={uploadVideo}
+                              className="w-0 h-0"
+                            ></input>
+                          </label>
+                        )}
+                      </div>
+                    )}
+                    {wrongFileType && (
+                      <p className="text-center text-xl text-red-400 font-semibold ">
+                        Please select a video file
+                      </p>
                     )}
                   </div>
-                )}
-                {wrongFileType && (
-                  <p className="text-center text-xl text-red-400 font-semibold ">
-                    Please select a video file
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-3 pb-10">
-                <label className="text-md font-medium dark:text-white">
-                  Caption
-                </label>
-                <input
-                  type="text"
-                  value={caption}
-                  onChange={(e) => {
-                    setcaption(e.target.value);
-                  }}
-                  className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
-                />
+                  <div className="flex flex-col gap-3 pb-10">
+                    <label className="text-md font-medium dark:text-white">
+                      Caption
+                    </label>
+                    <input
+                      type="text"
+                      value={caption}
+                      onChange={(e) => {
+                        setcaption(e.target.value);
+                      }}
+                      className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
+                    />
 
-                <div className="flex flex-row gap-3 items-center ">
-                  <label className="text-md font-medium dark:text-white">
-                    Thumbnail
-                  </label>
-                  {isLoadingThumbnail && (
-                    <div>
-                      <ReactLoading
-                        type="spinningBubbles"
-                        color={"#808080"}
-                        height={15}
-                        width={15}
+                    <div className="flex flex-row gap-3 items-center ">
+                      <label className="text-md font-medium dark:text-white">
+                        Thumbnail
+                      </label>
+                      {isLoadingThumbnail && (
+                        <div>
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color={"#808080"}
+                            height={15}
+                            width={15}
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <input
+                      type="file"
+                      value={thumbnail}
+                      name="upload-thumbnail"
+                      onChange={uploadThumbnail}
+                      className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
+                    />
+                    {wrongFileTypeThumbnail && (
+                      <p className=" text-sm text-red-400 font-semibold ">
+                        Please select an image
+                      </p>
+                    )}
+
+                    <label className="text-md font-medium dark:text-white">
+                      Description
+                    </label>
+                    <textarea
+                      name="paragraph_text"
+                      value={description}
+                      onChange={(e) => setdescription(e.target.value)}
+                      rows={5}
+                      className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
+                    ></textarea>
+                    <label className="text-md font-medium dark:text-white">
+                      Tags
+                    </label>
+                    <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black ">
+                      <TagsInput
+                        value={tags}
+                        onChange={setTags}
+                        name="tags"
+                        classNames={{
+                          input: "text-gray-500",
+                        }}
+                        placeHolder="Enter your tags here"
                       />
                     </div>
-                  )}
-                </div>
 
-                <input
-                  type="file"
-                  value={thumbnail}
-                  name="upload-thumbnail"
-                  onChange={uploadThumbnail}
-                  className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
-                />
-                {wrongFileTypeThumbnail && (
-                  <p className=" text-sm text-red-400 font-semibold ">
-                    Please select an image
-                  </p>
-                )}
-
-                <label className="text-md font-medium dark:text-white">
-                  Description
-                </label>
-                <textarea
-                  name="paragraph_text"
-                  value={description}
-                  onChange={(e) => setdescription(e.target.value)}
-                  rows={5}
-                  className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black dark:text-white"
-                ></textarea>
-                <label className="text-md font-medium dark:text-white">
-                  Tags
-                </label>
-                <div className="rounded outline-none text-md border-2 border-gray-200 p-2 lg-p-4 dark:bg-black ">
-                  <TagsInput
-                    value={tags}
-                    onChange={setTags}
-                    name="tags"
-                    classNames={{
-                      input: "text-gray-500",
-                    }}
-                    placeHolder="Enter your tags here"
-                  />
-                </div>
-
-                <div className="flex gap-6 mt-10">
-                  <button
-                    onClick={handlePost}
-                    type="button"
-                    className="text-md font-medium p-2 rounded w-28 lg:w-44 outline-none bg-[#F51997] text-white"
-                  >
-                    Upload
-                  </button>
-                  <button
-                    onClick={confirmDiscard}
-                    type="button"
-                    className="border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none dark:bg-black dark:text-white"
-                  >
-                    Discard
-                  </button>
+                    <div className="flex gap-6 mt-10">
+                      <button
+                        onClick={handlePost}
+                        type="button"
+                        className="text-md font-medium p-2 rounded w-28 lg:w-44 outline-none bg-[#F51997] text-white"
+                      >
+                        Upload
+                      </button>
+                      <button
+                        onClick={confirmDiscard}
+                        type="button"
+                        className="border-gray-300 border-2 text-md font-medium p-2 rounded w-28 lg:w-44 outline-none dark:bg-black dark:text-white"
+                      >
+                        Discard
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -40,8 +40,6 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     setOpen(true);
   };
 
-  console.log(userProfile);
-
   useEffect(() => {
     if (session) {
       addUser(session.user);
@@ -150,6 +148,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
               onClick={() => {
                 signOut();
                 removeUser();
+                router.push("/");
               }}
               className="text-red-500 px-2 dark:text-red-700 border-2 rounded dark:border-white"
             >

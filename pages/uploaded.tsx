@@ -12,6 +12,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/authStore";
 import { useRouter } from "next/router";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { request } from "http";
 
 interface IProps {
   uploaedVideos: Video[];
@@ -19,19 +22,7 @@ interface IProps {
 
 const Uploaded = ({ uploaedVideos }: IProps) => {
   const [videos, setVideos] = useState(uploaedVideos);
-  const [isUser, setisUser] = useState(false);
   const { userProfile }: { userProfile: any } = useAuthStore();
-  const router = useRouter();
-
-  const { id } = router.query;
-
-  useEffect(() => {
-    if (id !== userProfile?.id || !userProfile) {
-      router.push(`/`);
-    } else {
-      setisUser(true);
-    }
-  }, []);
 
   const handleDeleteVideoFromAccount = async (postId: string) => {
     const id = toast.loading("Deleting your video", {
@@ -76,7 +67,7 @@ const Uploaded = ({ uploaedVideos }: IProps) => {
 
   return (
     <>
-      {isUser && (
+      {userProfile && (
         <div className="flex w-full h-full flex-col">
           <ToastContainer />
           <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
@@ -106,16 +97,25 @@ const Uploaded = ({ uploaedVideos }: IProps) => {
   );
 };
 
-export const getServerSideProps = async (context: {
-  query: { id: string };
-}) => {
+export const getServerSideProps = async (context: any) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
   let id: string = context.query.id;
 
-  const uploaedVideos = await axios.get(`${BASE_URL}/api/uploaded/${id}`);
+  if (!session || session.user.id !== id) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  } else {
+    const uploaedVideos = await axios.get(`${BASE_URL}/api/uploaded/${id}`);
 
-  return {
-    props: { uploaedVideos: uploaedVideos.data },
-  };
+    return {
+      props: { uploaedVideos: uploaedVideos.data },
+    };
+  }
 };
 
 export default Uploaded;
