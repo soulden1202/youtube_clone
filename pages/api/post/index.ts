@@ -10,7 +10,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  //todo: add auth check for all requests
   const session = await getServerSession(req, res, authOptions);
   if (req.method === "GET") {
     try {

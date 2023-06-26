@@ -136,6 +136,8 @@ export const userCreatedPostsQuery = (userId: string | string[]) => {
       },
     likes,
     viewCount,
+    tags,
+    description
   }`;
 
   return query;

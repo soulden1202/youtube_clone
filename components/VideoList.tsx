@@ -11,6 +11,7 @@ import { BASE_URL } from "../utils";
 import Dropdown from "rc-dropdown";
 import Menu, { Item as MenuItem, Divider } from "rc-menu";
 import "rc-dropdown/assets/index.css";
+import { useRouter } from "next/router";
 
 interface IProps {
   post: Video;
@@ -23,6 +24,7 @@ const VideoList: NextPage<IProps> = ({
   isCurrentOnLikedPage,
   handleRemove,
 }) => {
+  const router = useRouter();
   const dotMenuForUploadedPage = (
     <Menu onSelect={onSelect} className="w-[100px] h-[50px]">
       <MenuItem
@@ -67,7 +69,16 @@ const VideoList: NextPage<IProps> = ({
 
   async function onSelect(info: any) {
     if (info.key == "edit") {
-      console.log("edit");
+      router.push({
+        pathname: "/edit",
+        query: {
+          id: post.userId,
+          postId: post._id,
+          caption: post.caption,
+          description: post.description,
+          tags: post.tags,
+        },
+      });
     } else if (info.key == "delete") {
       //this function can be called if we are currently on uploaded videos page
       handleRemove(data.id);

@@ -18,6 +18,7 @@ export default async function handler(
       res.status(200).json(data[0]);
     } catch (error) {
       console.log(error);
+      res.status(500).json("SERVER_ERROR");
     }
   } else if (req.method === "PUT") {
     const { comment, userId } = req.body;
