@@ -188,8 +188,8 @@ const Edit = ({
 
                   <div className="flex flex-row gap-3 items-center ">
                     <label className="text-md font-medium dark:text-white">
-                      Thumbnail (Leave this empty if you don't want to chang the
-                      thumbnail)
+                      Thumbnail (Leave this empty if you don&apos;t want to
+                      chang the thumbnail)
                     </label>
                     {isLoadingThumbnail && (
                       <div>
