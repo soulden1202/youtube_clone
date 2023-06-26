@@ -14,10 +14,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 interface IProps {
-  likeVideo: Video[];
+  likedVideos: Video[];
 }
 
-const Liked = ({ likeVideo }: IProps) => {
+const Liked = ({ likedVideos }: IProps) => {
   const handleRemoveFromLikedList = async (postId: string) => {};
 
   const { userProfile }: { userProfile: any } = useAuthStore();
@@ -33,8 +33,8 @@ const Liked = ({ likeVideo }: IProps) => {
             Your Liked Videos
           </div>
           <div className="flex flex-col w-full h-full items-center  gap-[30px] videos  ">
-            {likeVideo.length ? (
-              likeVideo.map((video: Video) => (
+            {likedVideos.length ? (
+              likedVideos.map((video: Video) => (
                 <div
                   className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
                   key={video._id}
@@ -69,10 +69,10 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
-  const likeVideo = await axios.get(`${BASE_URL}/api/liked/${id}`);
+  const likedVideos = await axios.get(`${BASE_URL}/api/liked/${id}`);
 
   return {
-    props: { likeVideo: likeVideo.data },
+    props: { likedVideos: likedVideos.data },
   };
 };
 
