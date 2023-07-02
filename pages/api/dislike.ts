@@ -24,6 +24,11 @@ export default async function handler(
           .unset([`likes[_ref=="${userId}"]`])
           .commit();
 
+        await client
+          .patch(session.user.id)
+          .unset([`liked[_ref=="${postId}"]`])
+          .commit();
+
         const data = await client
           .patch(postId)
           .setIfMissing({ dislikes: [] })
@@ -35,11 +40,27 @@ export default async function handler(
           ])
           .commit();
 
+        await client
+          .patch(session.user.id)
+          .setIfMissing({ disliked: [] })
+          .insert("after", "disliked[-1]", [
+            {
+              _key: uuid(),
+              _ref: postId,
+            },
+          ])
+          .commit();
+
         res.status(200).json(data);
       } else if (dislike === false) {
         const data = await client
           .patch(postId)
           .unset([`dislikes[_ref=="${userId}"]`])
+          .commit();
+
+        await client
+          .patch(session.user.id)
+          .unset([`disliked[_ref=="${postId}"]`])
           .commit();
 
         res.status(200).json(data);
