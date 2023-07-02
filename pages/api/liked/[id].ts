@@ -14,7 +14,7 @@ export default async function handler(
 
       const data = await client.fetch(query);
 
-      res.status(200).json(data);
+      res.status(200).json(data[0].liked);
     } catch (error) {
       console.log(error);
       res.status(500).json("SERVER_ERROR");

@@ -144,31 +144,20 @@ export const userCreatedPostsQuery = (userId: string | string[]) => {
 };
 
 export const userLikedPostsQuery = (userId: string | string[]) => {
-  const query = `*[_type == 'post' && '${userId}' in likes[]._ref ] | order(_createdAt desc) {
-        _id,
-     caption,
-     createdAt,
-     uploadVideo{
-        video{
-          asset ->{
-            _id,
-            url
-          }
-        }, 
-        thumbnail{
+  const query = `*[_type == 'user' && _id == '${userId}'] {
+
+    liked[]->{
+      _id,
+      viewCount,
+      caption,
+      createdAt,
+      uploadVideo{thumbnail{
           asset ->{
             url
-          }
-        }
-      },
-      userId,
-      postedBy->{
-        _id,
-        userName,
-        image
-      },
-    likes,
-    viewCount,
+          } }
+    }
+
+}
   }`;
 
   return query;

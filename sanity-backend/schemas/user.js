@@ -13,5 +13,34 @@ export default {
       title: "Image",
       type: "string",
     },
+    {
+      name: "liked",
+      title: "Liked",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "post" }],
+        },
+      ],
+    },
+    {
+      name: "disliked",
+      title: "Disliked",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: [{ type: "post" }],
+        },
+      ],
+    },
+
+    {
+      name: "playLists",
+      title: "Play Lists",
+      type: "array",
+      of: [{ type: "playList" }],
+    },
   ],
 };
