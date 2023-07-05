@@ -15,12 +15,13 @@ import { BsFillSunFill } from "react-icons/bs";
 
 import Logo from "../utils/extreme-11.png";
 import Switch from "react-switch";
-import { createOrGetUser } from "../utils";
+import { BASE_URL, createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
 import { IUser } from "../types";
 import { Button, Input } from "@material-tailwind/react";
 import SideBar from "./SideBar";
 import { useSession, signIn, signOut } from "next-auth/react";
+import axios from "axios";
 
 interface IProps {
   isDarkMode: boolean;

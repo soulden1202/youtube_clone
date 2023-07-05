@@ -41,7 +41,7 @@ const Liked = ({ likedVideos }: IProps) => {
                 >
                   <VideoList
                     post={video}
-                    isCurrentOnLikedPage={true}
+                    fromPage={"Liked"}
                     handleRemove={handleRemoveFromLikedList}
                   />
                 </div>

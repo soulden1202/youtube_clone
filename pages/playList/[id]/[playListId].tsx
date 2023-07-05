@@ -12,7 +12,6 @@ import VideoList from "../../../components/VideoList";
 import { useRouter } from "next/router";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]";
-import { Console } from "console";
 
 interface IProps {
   playListVideos: Video[];
@@ -22,7 +21,6 @@ const Liked = ({ playListVideos }: IProps) => {
   const handleRemoveFromLikedList = async (postId: string) => {};
 
   const { userProfile }: { userProfile: any } = useAuthStore();
-  const router = useRouter();
 
   return (
     <>
@@ -74,8 +72,6 @@ export const getServerSideProps = async (context: any) => {
     .catch((error) => {
       console.log(error.data);
     });
-
-  console.log(playListVideos.data[0].videos);
 
   return {
     props: { playListVideos: playListVideos.data[0].videos },
