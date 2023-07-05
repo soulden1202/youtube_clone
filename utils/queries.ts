@@ -201,3 +201,34 @@ export const topicPostsQuery = (tags: string | string[], id: string) => {
 
   return query;
 };
+
+export const getUserPlayLists = (userId: string) => {
+  const query = `*[_type == "user" && _id == '${userId}']{
+    playLists[]{
+      playListName,
+      _key
+    }
+   }`;
+  return query;
+};
+
+export const getUserPlayListDetail = (userId: string, key: string) => {
+  const query = `*[_type == "user" && _id == '${userId}']{
+     playLists[]{
+   _key == '${key}' =>{
+   videos[]->{
+          _id,
+      viewCount,
+      caption,
+      createdAt,
+      uploadVideo{thumbnail{
+          asset ->{
+            url
+          } }
+    }
+   }
+ }
+ },
+   }`;
+  return query;
+};

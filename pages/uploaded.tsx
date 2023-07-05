@@ -82,7 +82,7 @@ const Uploaded = ({ uploaedVideos }: IProps) => {
                 >
                   <VideoList
                     post={video}
-                    isCurrentOnLikedPage={false}
+                    fromPage={"Uploaded"}
                     handleRemove={handleDeleteVideoFromAccount}
                   />
                 </div>
