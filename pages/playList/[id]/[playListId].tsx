@@ -2,28 +2,25 @@ import axios from "axios";
 
 import React, { useEffect, useRef, useState } from "react";
 
-import { Video } from "../types";
-import { BASE_URL } from "../utils";
+import { Video } from "../../../types";
+import { BASE_URL } from "../../../utils";
 
-import VideoCard from "../components/VideoCard";
-import NoResults from "../components/NoResults";
-import VideoList from "../components/VideoList";
-import useAuthStore from "../store/authStore";
+import NoResults from "../../../components/NoResults";
+import useAuthStore from "../../../store/authStore";
+import VideoList from "../../../components/VideoList";
+
 import { useRouter } from "next/router";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
+import { authOptions } from "../../api/auth/[...nextauth]";
 
 interface IProps {
-  likedVideos: Video[];
+  playListVideos: Video[];
 }
 
-const Liked = ({ likedVideos }: IProps) => {
+const Liked = ({ playListVideos }: IProps) => {
   const handleRemoveFromLikedList = async (postId: string) => {};
 
   const { userProfile }: { userProfile: any } = useAuthStore();
-  const router = useRouter();
-
-  const { id } = router.query;
 
   return (
     <>
@@ -33,15 +30,15 @@ const Liked = ({ likedVideos }: IProps) => {
             Your Liked Videos
           </div>
           <div className="flex flex-col w-full h-full items-center  gap-[30px] videos  ">
-            {likedVideos.length ? (
-              likedVideos.map((video: Video) => (
+            {playListVideos.length ? (
+              playListVideos.map((video: Video) => (
                 <div
                   className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
                   key={video._id}
                 >
                   <VideoList
                     post={video}
-                    fromPage={"Liked"}
+                    fromPage={"PlayList"}
                     handleRemove={handleRemoveFromLikedList}
                   />
                 </div>
@@ -59,9 +56,10 @@ const Liked = ({ likedVideos }: IProps) => {
 export const getServerSideProps = async (context: any) => {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  let id: string = context.query.id;
+  let userId: string = context.query.id;
+  let playListId: string = context.query.playListId;
 
-  if (!session || session.user.id !== id) {
+  if (!session || session.user.id !== userId) {
     return {
       redirect: {
         destination: "/",
@@ -69,10 +67,12 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
-  const likedVideos = await axios.get(`${BASE_URL}/api/liked/${id}`);
+  const playListVideos = await axios.get(
+    `${BASE_URL}/api/getPlayList/${userId}/${playListId}`
+  );
 
   return {
-    props: { likedVideos: likedVideos.data },
+    props: { playListVideos: playListVideos.data[0].videos },
   };
 };
 

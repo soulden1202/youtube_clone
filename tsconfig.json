@@ -20,7 +20,8 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/_middleware.js",
-    "pages/api/auth/[...nextauth].js"
+    "pages/api/auth/[...nextauth].js",
+    "pages/playList/[id]"
   ],
   "exclude": ["node_modules"]
 }
