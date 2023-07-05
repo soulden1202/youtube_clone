@@ -67,11 +67,9 @@ export const getServerSideProps = async (context: any) => {
       },
     };
   }
-  const playListVideos = await axios
-    .get(`${BASE_URL}/api/getPlayList/${userId}/${playListId}`)
-    .catch((error) => {
-      console.log(error.data);
-    });
+  const playListVideos = await axios.get(
+    `${BASE_URL}/api/getPlayList/${userId}/${playListId}`
+  );
 
   return {
     props: { playListVideos: playListVideos.data[0].videos },
