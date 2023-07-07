@@ -146,7 +146,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
                 >
                   <Link
                     href={{
-                      pathname: `/playList/${userProfile.id}/${playList._key}`,
+                      pathname: `/playlist/${userProfile.id}/${playList._key}`,
                     }}
                   >
                     <div className="flex flex-row gap-3 text-white items-center justify-center">

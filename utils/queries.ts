@@ -206,7 +206,10 @@ export const getUserPlayLists = (userId: string) => {
   const query = `*[_type == "user" && _id == '${userId}']{
     playLists[]{
       playListName,
-      _key
+      _key,
+      videos[]->{
+        _id
+      }
     }
    }`;
   return query;
@@ -216,6 +219,7 @@ export const getUserPlayListDetail = (userId: string, key: string) => {
   const query = `*[_type == "user" && _id == '${userId}']{
      playLists[]{
    _key == '${key}' =>{
+     playListName,
    videos[]->{
           _id,
       viewCount,

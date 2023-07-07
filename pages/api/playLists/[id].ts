@@ -23,20 +23,30 @@ export default async function handler(
 
       const data = await client.fetch(query);
 
-      console.log(data[0].playLists);
-
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
     }
   } else if (req.method === "POST") {
+    const newPlayList = req.body;
+    const { id } = req.query;
     if (!session) {
       res.status(404).json("User not found");
-    } else if (session.user.id !== req.body.userId) {
+    } else if (session.user.id !== id) {
       res.status(401).json("Unauthorized");
     } else {
-      const docs = req.body;
-      client.create(docs).then(() => res.status(201).json("Video Created"));
+      const data = await client
+        .patch(id.toString())
+        .setIfMissing({ playLists: [] })
+        .append(`playLists`, [
+          {
+            _key: newPlayList._key,
+            playListName: newPlayList.playListName,
+            videos: [],
+          },
+        ])
+        .commit();
+      res.status(200).json(data);
     }
   } else if (req.method === "PATCH") {
     const { id } = req.body;

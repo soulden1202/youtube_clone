@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Video } from "../types";
 import { NextPage } from "next";
-import Image from "next/image";
+
 import Link from "next/link";
 
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import { AiOutlinePlus } from "react-icons/ai";
 import moment from "moment";
 import axios from "axios";
 import { BASE_URL } from "../utils";
@@ -14,32 +15,60 @@ import "rc-dropdown/assets/index.css";
 import "rc-menu/assets/index.css";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
+import usePlayListStore from "../store/playListStore";
+import Checkbox from "rc-checkbox";
+import "rc-checkbox/assets/index.css";
+import useAuthStore from "../store/authStore";
+import { uuid } from "uuidv4";
 
 interface IProps {
   post: Video;
   fromPage: string;
-  handleRemove: (postId: string) => Promise<void>;
+  handleRemove?: (postId: string) => Promise<void>;
+  handlePlayListUpdate?: (
+    videoId: string,
+    playListName: any,
+    playListId: any,
+    isAdding: any,
+    userId: any
+  ) => Promise<void>;
 }
 
-const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
-  const [dummy, setdummy] = useState([
-    { name: "test1", inplay: true },
-    { name: "test2", inplay: true },
-  ]);
+const VideoList: NextPage<IProps> = ({
+  post,
+  fromPage,
+  handleRemove,
+  handlePlayListUpdate,
+}) => {
+  const {
+    playLists,
+    addVideoToPlayList,
+    removeVideoFromPlayList,
+    addPlayList,
+  }: {
+    playLists: any;
+    addVideoToPlayList: any;
+    removeVideoFromPlayList: any;
+    addPlayList: any;
+  } = usePlayListStore();
 
-  const [playListName, setplayListName] = useState("");
+  const [newplayListName, setnewPlayListName] = useState("");
   const [disabled, setDisabled] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const { userProfile }: { userProfile: any } = useAuthStore();
+
   useEffect(() => {
-    const check = dummy.some((data) => data.name === playListName);
-    if (playListName.length <= 0 || check) {
+    const check = playLists.some(
+      (p: any) => p.playListName === newplayListName
+    );
+    if (newplayListName.length <= 0 || check) {
       setDisabled(true);
     } else {
       setDisabled(false);
     }
-  }, [playListName]);
+  }, [newplayListName]);
 
   const openModal = () => {
     setIsOpen(true);
@@ -49,11 +78,59 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
     setIsOpen(false);
   };
 
-  const createPlayList = (e: any) => {
-    const newPlayList = { name: playListName, inplay: false };
+  const createPlayList = async (e: any) => {
+    const key = uuid();
+    const newPlayList = {
+      playListName: newplayListName,
+      _key: key,
+      videos: [],
+    };
 
-    setdummy([...dummy, newPlayList]);
+    const data = {
+      playListName: newplayListName,
+      _key: key,
+      videoId: post._id,
+    };
+
+    await axios
+      .post(`${BASE_URL}/api/playLists/${userProfile.id}`, data)
+      .catch((error) => {
+        console.log(error);
+      });
+
+    addPlayList(newPlayList);
+    setnewPlayListName("");
   };
+
+  const onCheckBoxChange = async (
+    e: any,
+    playListId: any,
+    videoId: any,
+    playListName: any
+  ) => {
+    if (e.target.checked && handlePlayListUpdate) {
+      await handlePlayListUpdate(
+        videoId,
+        playListName,
+        playListId,
+        true,
+        userProfile.id
+      );
+
+      addVideoToPlayList(videoId, playListName, playLists); //
+    } else if (!e.target.checked && handlePlayListUpdate) {
+      await handlePlayListUpdate(
+        videoId,
+        playListName,
+        playListId,
+        false,
+        userProfile.id
+      );
+      removeVideoFromPlayList(videoId, playListName, playLists);
+    }
+  };
+
+  const data = { id: post._id };
 
   const customStyles = {
     content: {
@@ -86,7 +163,7 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
   );
 
   const dotMenuForLikedPage = (
-    <Menu onSelect={onSelect} className="w-[120px] h-[100px]">
+    <Menu onSelect={onSelect} className="w-[130px] h-[100px]">
       <MenuItem
         className="h-[25px] cursor-pointer hover:bg-blue-300 justify-center text-center mt-2 flex items-center "
         key="remove"
@@ -94,21 +171,33 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
         Remove from liked
       </MenuItem>
       <Divider />
-      <MenuItem
-        key="playlist"
-        className="flex cursor-pointer h-[25px]  hover:bg-blue-300 justify-center items-center text-center mt-2 px-2 py-2"
-      >
-        Add to playlist
-      </MenuItem>
       <Divider />
-      <SubMenu key="1" title="let me check">
-        {dummy.map((item) => (
-          <MenuItem className="cursor-pointer" key={`${item.name}`}>
-            {item.name}
+      <SubMenu key="1" title="Add to playlist">
+        {playLists.map((playList: any) => (
+          <MenuItem className="" key={`${playList._key}`}>
+            <Checkbox
+              name={playList.playListName}
+              defaultChecked={playList.videos.some(
+                (v: any) => v._id === data.id
+              )}
+              onChange={(e: any) =>
+                onCheckBoxChange(
+                  e,
+                  playList._key,
+                  data.id,
+                  playList.playListName
+                )
+              }
+            />
+            &nbsp;&nbsp;{playList.playListName}
           </MenuItem>
         ))}
-        <MenuItem className="cursor-pointer" key="add" onClick={openModal}>
-          +
+        <MenuItem
+          className="flex cursor-pointer justify-center items-center"
+          key="add"
+          onClick={openModal}
+        >
+          <AiOutlinePlus></AiOutlinePlus>
         </MenuItem>
       </SubMenu>
     </Menu>
@@ -124,8 +213,6 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
       </MenuItem>
     </Menu>
   );
-
-  const data = { id: post._id };
 
   const handlePostClick = () => {
     axios.patch(`${BASE_URL}/api/post`, data);
@@ -145,7 +232,9 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
       });
     } else if (info.key == "delete") {
       //this function can be called if we are currently on uploaded videos page
-      handleRemove(data.id);
+      if (handleRemove) {
+        handleRemove(data.id);
+      }
     }
   }
 
@@ -169,9 +258,9 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
               type="text"
               id="input"
               className="dark:text-white dark:bg-black w-full outline-0 border-b border-gray-500 dark:focus:border-white focus:border-black"
-              value={playListName}
+              value={newplayListName}
               onChange={(e) => {
-                setplayListName(e.target.value);
+                setnewPlayListName(e.target.value);
               }}
               placeholder="Play list name"
             />
@@ -179,7 +268,7 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
             <div className="flex flex-row justify-end gap-4 mt-3">
               <button
                 onClick={() => {
-                  setplayListName("");
+                  setnewPlayListName("");
                   closeModal();
                 }}
                 className=" text-gray-500"
@@ -190,9 +279,10 @@ const VideoList: NextPage<IProps> = ({ post, fromPage, handleRemove }) => {
                 className="disabled:bg-gray-500 border-1 p-2 rounded bg-blue-500 dark:text-white"
                 onClick={(e) => {
                   createPlayList(e);
-                  setplayListName("");
+
                   closeModal();
                 }}
+                type="submit"
                 disabled={disabled}
               >
                 Create

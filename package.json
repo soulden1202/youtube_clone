@@ -24,6 +24,7 @@
     "next": "^12.1.6",
     "next-auth": "^4.22.1",
     "nprogress": "^0.2.0",
+    "rc-checkbox": "^3.1.0",
     "rc-dropdown": "^4.1.0",
     "rc-menu": "^9.9.2",
     "react": "18.1.0",
