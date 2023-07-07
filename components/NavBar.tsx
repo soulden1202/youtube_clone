@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import {
   AiOutlineLogout,
   AiOutlineMenu,
@@ -15,13 +14,10 @@ import { BsFillSunFill } from "react-icons/bs";
 
 import Logo from "../utils/extreme-11.png";
 import Switch from "react-switch";
-import { BASE_URL, createOrGetUser } from "../utils";
 import useAuthStore from "../store/authStore";
-import { IUser } from "../types";
 import { Button, Input } from "@material-tailwind/react";
 import SideBar from "./SideBar";
 import { useSession, signIn, signOut } from "next-auth/react";
-import axios from "axios";
 
 interface IProps {
   isDarkMode: boolean;
@@ -29,8 +25,7 @@ interface IProps {
 }
 
 const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
-  const { userProfile, addUser, removeUser } = useAuthStore();
-  const [isFocused, setisFocused] = useState(false);
+  const { addUser, removeUser } = useAuthStore();
   const router = useRouter();
   const { data: session } = useSession();
 

@@ -21,7 +21,8 @@
     "**/*.tsx",
     "pages/_middleware.js",
     "pages/api/auth/[...nextauth].js",
-    "pages/playList/[id]"
+    "pages/playlist/[id]",
+    "pages/api/liked/[id].js"
   ],
   "exclude": ["node_modules"]
 }
