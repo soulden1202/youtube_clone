@@ -10,6 +10,7 @@ interface IProps {
 
 const Like = ({ likes, handleLike, handleUnlike }: IProps) => {
   const { userProfile }: { userProfile: any } = useAuthStore();
+  const [totalLikes, settotalLikes] = useState(likes?.length || 0);
 
   const [alreadyLiked, setalreadyLiked] = useState(false);
   const filterLike = likes?.filter((item) => item._ref === userProfile?.id);
@@ -20,25 +21,33 @@ const Like = ({ likes, handleLike, handleUnlike }: IProps) => {
     } else {
       setalreadyLiked(false);
     }
-  }, [likes, filterLike]);
+  }, []);
 
   return (
     <div className="gap-2 flex flex-row items-center cursor-pointer ">
       <div className="">
         {alreadyLiked ? (
           <AiFillLike
-            onClick={handleUnlike}
+            onClick={() => {
+              handleUnlike();
+              setalreadyLiked(false);
+              settotalLikes(totalLikes - 1);
+            }}
             className="dark:text-white text-xl"
           ></AiFillLike>
         ) : (
           <AiOutlineLike
-            onClick={handleLike}
+            onClick={() => {
+              handleLike();
+              setalreadyLiked(true);
+              settotalLikes(totalLikes + 1); //
+            }}
             className="dark:text-white text-xl "
           ></AiOutlineLike>
         )}
       </div>
       <div className="dark:text-white text-base">
-        <span>{likes?.length || 0}</span>
+        <span>{totalLikes}</span>
       </div>
     </div>
   );
