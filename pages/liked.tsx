@@ -22,6 +22,8 @@ interface IProps {
 }
 
 const Liked = ({ likedVideos, error }: IProps) => {
+  const [videos, setvideos] = useState(likedVideos);
+
   const handlePlayListUpdate = async (
     videoId: string,
     playListName: any,
@@ -74,10 +76,48 @@ const Liked = ({ likedVideos, error }: IProps) => {
       });
   };
 
+  const handleRemoveFromLikedList = async (userId: string, videoId: string) => {
+    const id = toast.loading("Removing video from your liked list", {
+      position: "bottom-right",
+
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      isLoading: true,
+    });
+
+    await axios
+      .put(`${BASE_URL}/api/like`, {
+        userId: userId,
+        postId: videoId,
+        like: false,
+      })
+      .then((response) => {
+        toast.update(id, {
+          render: "Successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+        setvideos(videos.filter((v: any) => v._id !== videoId));
+      })
+      .catch((error) => {
+        toast.update(id, {
+          render: error.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+          hideProgressBar: true,
+        });
+      });
+  };
+
   const { userProfile }: { userProfile: any } = useAuthStore();
   const router = useRouter();
-
-  const { id } = router.query;
 
   return (
     <>
@@ -88,8 +128,8 @@ const Liked = ({ likedVideos, error }: IProps) => {
             Your Liked Videos
           </div>
           <div className="flex flex-col w-full h-full items-center  gap-[30px] videos  ">
-            {likedVideos.length ? (
-              likedVideos.map((video: Video) => (
+            {videos.length ? (
+              videos.map((video: Video) => (
                 <div
                   className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
                   key={video._id}
@@ -98,6 +138,7 @@ const Liked = ({ likedVideos, error }: IProps) => {
                     post={video}
                     fromPage={"Liked"}
                     handlePlayListUpdate={handlePlayListUpdate}
+                    handleRemoveFromLikedList={handleRemoveFromLikedList}
                   />
                 </div>
               ))
