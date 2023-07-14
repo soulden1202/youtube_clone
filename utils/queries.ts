@@ -220,6 +220,7 @@ export const getUserPlayListDetail = (userId: string, key: string) => {
      playLists[]{
    _key == '${key}' =>{
      playListName,
+     _key,
    videos[]->{
           _id,
       viewCount,

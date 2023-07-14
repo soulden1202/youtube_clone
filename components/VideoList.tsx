@@ -24,6 +24,7 @@ import { uuid } from "uuidv4";
 interface IProps {
   post: Video;
   fromPage: string;
+  playListName?: string;
   handleRemove?: (postId: string) => Promise<void>;
   handlePlayListUpdate?: (
     videoId: string,
@@ -32,6 +33,14 @@ interface IProps {
     isAdding: any,
     userId: any
   ) => Promise<void>;
+  handleRemoveFromLikedList?: (
+    userId: string,
+    videoId: string
+  ) => Promise<void>;
+  handleRemoveFromCurrentPlayList?: (
+    userId: string,
+    videoId: string
+  ) => Promise<void>;
 }
 
 const VideoList: NextPage<IProps> = ({
@@ -39,6 +48,9 @@ const VideoList: NextPage<IProps> = ({
   fromPage,
   handleRemove,
   handlePlayListUpdate,
+  handleRemoveFromLikedList,
+  playListName,
+  handleRemoveFromCurrentPlayList,
 }) => {
   const {
     playLists,
@@ -166,9 +178,9 @@ const VideoList: NextPage<IProps> = ({
     <Menu onSelect={onSelect} className="w-[130px] h-[100px]">
       <MenuItem
         className="h-[25px] cursor-pointer hover:bg-blue-300 justify-center text-center mt-2 flex items-center "
-        key="remove"
+        key="removeLiked"
       >
-        Remove from liked
+        Remove
       </MenuItem>
       <Divider />
       <Divider />
@@ -204,13 +216,46 @@ const VideoList: NextPage<IProps> = ({
   );
 
   const dotMenuForPlayListPage = (
-    <Menu onSelect={onSelect} className="w-[120px] h-[100px]">
+    <Menu onSelect={onSelect} className="w-[130px] h-[100px]">
       <MenuItem
         className="h-[25px] cursor-pointer hover:bg-blue-300 justify-center text-center mt-2 flex items-center "
-        key="remove"
+        key="removeFromList"
       >
-        Remove from liked
+        Remove
       </MenuItem>
+      <Divider />
+      <Divider />
+      <SubMenu key="1" title="Add to playlist">
+        {playLists.map(
+          (playList: any) =>
+            playListName !== playList.playListName && (
+              <MenuItem className="" key={`${playList._key}`}>
+                <Checkbox
+                  name={playList.playListName}
+                  defaultChecked={playList.videos.some(
+                    (v: any) => v._id === data.id
+                  )}
+                  onChange={(e: any) =>
+                    onCheckBoxChange(
+                      e,
+                      playList._key,
+                      data.id,
+                      playList.playListName
+                    )
+                  }
+                />
+                &nbsp;&nbsp;{playList.playListName}
+              </MenuItem>
+            )
+        )}
+        <MenuItem
+          className="flex cursor-pointer justify-center items-center"
+          key="add"
+          onClick={openModal}
+        >
+          <AiOutlinePlus></AiOutlinePlus>
+        </MenuItem>
+      </SubMenu>
     </Menu>
   );
 
@@ -234,6 +279,15 @@ const VideoList: NextPage<IProps> = ({
       //this function can be called if we are currently on uploaded videos page
       if (handleRemove) {
         handleRemove(data.id);
+      }
+    } else if (info.key == "removeLiked") {
+      if (handleRemoveFromLikedList) {
+        handleRemoveFromLikedList(userProfile.id, post._id);
+      }
+    } else if (info.key == "removeFromList") {
+      if (handleRemoveFromCurrentPlayList) {
+        handleRemoveFromCurrentPlayList(userProfile.id, post._id);
+        removeVideoFromPlayList(post._id, playListName, playLists);
       }
     }
   }
