@@ -52,7 +52,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box className="absolute h-[100vh] w-[200px] bg-sidebar">
+      <Box className="absolute h-[100vh] w-[200px] bg-sidebar overflow-auto">
         <div className="flex flex-col">
           <div className="flex flex-row items-center justify-center ml-3">
             <button
