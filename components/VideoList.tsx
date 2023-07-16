@@ -110,8 +110,20 @@ const VideoList: NextPage<IProps> = ({
         console.log(error);
       });
 
-    addPlayList(newPlayList);
+    addPlayList(newPlayList, playLists);
     setnewPlayListName("");
+
+    if (handlePlayListUpdate) {
+      await handlePlayListUpdate(
+        post._id,
+        newplayListName,
+        key,
+        true,
+        userProfile.id
+      ).then((res: any) => {
+        addVideoToPlayList(post._id, newplayListName, playLists);
+      });
+    }
   };
 
   const onCheckBoxChange = async (
@@ -141,8 +153,6 @@ const VideoList: NextPage<IProps> = ({
       removeVideoFromPlayList(videoId, playListName, playLists);
     }
   };
-
-  const data = { id: post._id };
 
   const customStyles = {
     content: {
@@ -190,13 +200,13 @@ const VideoList: NextPage<IProps> = ({
             <Checkbox
               name={playList.playListName}
               defaultChecked={playList.videos.some(
-                (v: any) => v._id === data.id
+                (v: any) => v._id === post._id
               )}
               onChange={(e: any) =>
                 onCheckBoxChange(
                   e,
                   playList._key,
-                  data.id,
+                  post._id,
                   playList.playListName
                 )
               }
@@ -233,13 +243,13 @@ const VideoList: NextPage<IProps> = ({
                 <Checkbox
                   name={playList.playListName}
                   defaultChecked={playList.videos.some(
-                    (v: any) => v._id === data.id
+                    (v: any) => v._id === post._id
                   )}
                   onChange={(e: any) =>
                     onCheckBoxChange(
                       e,
                       playList._key,
-                      data.id,
+                      post._id,
                       playList.playListName
                     )
                   }
@@ -260,7 +270,7 @@ const VideoList: NextPage<IProps> = ({
   );
 
   const handlePostClick = () => {
-    axios.patch(`${BASE_URL}/api/post`, data);
+    axios.patch(`${BASE_URL}/api/post`, post._id);
   };
 
   async function onSelect(info: any) {
@@ -278,7 +288,7 @@ const VideoList: NextPage<IProps> = ({
     } else if (info.key == "delete") {
       //this function can be called if we are currently on uploaded videos page
       if (handleRemove) {
-        handleRemove(data.id);
+        handleRemove(post._id);
       }
     } else if (info.key == "removeLiked") {
       if (handleRemoveFromLikedList) {

@@ -4,10 +4,10 @@ import { persist } from "zustand/middleware";
 const playListStore = (set: any) => ({
   playLists: [],
 
-  addPlayList: (newPlayList: any) => {
-    set((state: any) => ({
-      playLists: [...state.playLists, newPlayList],
-    }));
+  addPlayList: (newPlayList: any, playLists: any) => {
+    let temp = playLists;
+    temp.push(newPlayList);
+    set({ playLists: temp });
   },
 
   setPlayLists: (playLists: any) => set({ playLists: playLists }),
