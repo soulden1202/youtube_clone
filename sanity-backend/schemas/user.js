@@ -42,5 +42,13 @@ export default {
       type: "array",
       of: [{ type: "playList" }],
     },
+    {
+      name: "autoPlay",
+      tile: "Auto Play",
+      type: "boolean",
+    },
   ],
+  initialValue: () => ({
+    autoPlay: false,
+  }),
 };
