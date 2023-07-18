@@ -14,6 +14,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 interface IProps {
   playListVideos: Video[];
@@ -139,27 +140,42 @@ const PlayList = ({
           <div className="flex dark:text-white ml-10 text-2xl font-bold mb-3 items-center justify-center">
             Play List: {playListName}
           </div>
-          <div className="flex flex-col w-full h-full items-center  gap-[30px] videos  ">
-            {videos && videos.length ? (
-              videos.map((video: Video) => (
-                <div
-                  className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
-                  key={video._id}
-                >
-                  <VideoList
-                    post={video}
-                    fromPage={"PlayList"}
-                    handleRemoveFromCurrentPlayList={
-                      handleRemoveFromCurrentPlayList
-                    }
-                    playListName={playListName}
-                    handlePlayListUpdate={handlePlayListUpdate}
-                  />
-                </div>
-              ))
-            ) : (
-              <NoResults text="Play List is Empty" />
-            )}
+          <div className="flex flex-row w-full h-full ">
+            <div className="flex w-[30%]">
+              <Link
+                href={{
+                  pathname: `/detail/${videos[0]._id}`,
+                  query: {
+                    playList: playListId,
+                    index: 0,
+                  },
+                }}
+              >
+                Play All
+              </Link>
+            </div>
+            <div className="flex flex-col w-full h-full items-center  gap-[30px] videos  ">
+              {videos && videos.length ? (
+                videos.map((video: Video) => (
+                  <div
+                    className="flex w-[90%] md:w-[70%] h-[50%] md:h-[20%]"
+                    key={video._id}
+                  >
+                    <VideoList
+                      post={video}
+                      fromPage={"PlayList"}
+                      handleRemoveFromCurrentPlayList={
+                        handleRemoveFromCurrentPlayList
+                      }
+                      playListName={playListName}
+                      handlePlayListUpdate={handlePlayListUpdate}
+                    />
+                  </div>
+                ))
+              ) : (
+                <NoResults text="Play List is Empty" />
+              )}
+            </div>
           </div>
         </div>
       )}

@@ -19,8 +19,8 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
   const changeVideo = () => {};
 
   return (
-    <div className="flex flex-row hover:bg-gray-700 rounded-sm">
-      <div className="flex flex-col object-cover w-[50%]">
+    <div className="flex flex-row justify-between w-full  hover:bg-gray-700 rounded-sm">
+      <div className="flex flex-row lg:w-[50%] w-[30%] ">
         <div
           className="rounded-3xl object-cover h-full w-full"
           onMouseEnter={() => {
@@ -32,7 +32,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
         >
           <video
             ref={videoRef}
-            className="bg-white dark:bg-black flex mx-1 rounded-2xl w-full h-[100px] border-2 border-gray-500"
+            className="bg-white dark:bg-black flex mx-1 rounded-2xl  border-2 border-gray-500"
             src={post.uploadVideo.video.asset.url}
             poster={post.uploadVideo.thumbnail.asset.url}
             muted
@@ -48,34 +48,34 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           </div>
         </div>
       </div>
-      <div className="mt-1 ml-3 w-[50%]" onClick={changeVideo}>
-        <div className="flex gap-3 cursor-pointer font-semibold rounded">
-          <div>
-            <div className="flex flex-col  gap-1">
-              <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
-                {post.caption}
-              </p>
-              <div className=" flex md:flex-col gap-1">
-                <p className="flex gap-1 font-medium text-xs items-center text-primary dark:text-white">
-                  {post.postedBy.userName} {` `}
-                  <GoVerified className="text-blue-400 text-md" />
-                </p>
-                <div className="flex flex-row gap-1 ">
-                  <p className="  text-xsfont-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
-                    {post.viewCount > 1
-                      ? ` ${post.viewCount} views`
-                      : ` ${post.viewCount} view`}
-                  </p>
-                  <span className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300">
-                    {" "}
-                    -{" "}
-                  </span>
-                  <p className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
-                    {moment(`${post.createdAt}`).fromNow()}
-                  </p>
-                </div>
-              </div>
-            </div>
+
+      <div
+        className="flex flex-col ml-4 lg:w-[45%] w-[70%]  gap-1 "
+        onClick={changeVideo}
+      >
+        <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
+          {post.caption.length >= 70
+            ? `${post.caption.substring(0, 70)}...`
+            : post.caption}
+        </p>
+        <div className=" flex md:flex-col gap-1">
+          <p className="flex gap-1 font-medium text-xs items-center text-primary dark:text-white">
+            {post.postedBy.userName} {` `}
+            <GoVerified className="text-blue-400 text-md" />
+          </p>
+          <div className="flex flex-row gap-1 ">
+            <p className="  text-xsfont-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
+              {post.viewCount > 1
+                ? ` ${post.viewCount} views`
+                : ` ${post.viewCount} view`}
+            </p>
+            <span className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300">
+              {" "}
+              -{" "}
+            </span>
+            <p className=" font-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
+              {moment(`${post.createdAt}`).fromNow()}
+            </p>
           </div>
         </div>
       </div>

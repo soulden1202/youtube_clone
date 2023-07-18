@@ -86,12 +86,12 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
 
   return (
     <div className="bg-white dark:bg-black w-full h-full">
-      <div className="flex lg:flex-row flex-col gap-6 md:gap-20">
-        <div className="mt-0 flex flex-col gap-10 overflow-hidden h-full videos flex-1 object-fill">
-          <div className="xl:w-[100%] w-[95%] ">
+      <div className="flex lg:flex-row flex-col gap-6">
+        <div className="mt-0 flex flex-col gap-10 overflow-hidden w-[100%] lg:w-[60%] h-full videos  object-fill">
+          <div className="flex xl:w-[100%] w-[95%] ">
             <video
               autoPlay
-              className=" flex mx-1 h-[400px] lg:h-[600px] w-full"
+              className=" flex mx-1 w-full"
               src={post.uploadVideo.video.asset.url}
               controls
             ></video>
@@ -206,7 +206,7 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
             ></Comments>
           </div>
         </div>
-        <div className="h-[92vh] overflow-hidden">
+        <div className="flex lg:w-[40%] flex-row overflow-hidden">
           <Sugestion recommendVideos={recommendVideos} />
         </div>
       </div>
@@ -214,12 +214,10 @@ const Detail = ({ postDetails, recommendVideos }: IProps) => {
   );
 };
 
-export const getServerSideProps = async ({
-  params: { id },
-}: {
-  params: { id: string };
-}) => {
-  const { data } = await axios.get(`${BASE_URL}/api/post/${id}`);
+export const getServerSideProps = async (context: any) => {
+  const videoId = context.query.id[0];
+
+  const { data } = await axios.get(`${BASE_URL}/api/post/${videoId}`);
   const dataToRquest = {
     tags: data.tags,
     id: data._id,
@@ -229,8 +227,24 @@ export const getServerSideProps = async ({
     dataToRquest
   );
 
+  if (context.query.playList) {
+    return {
+      props: {
+        postDetails: data,
+        recommendVideos: recomendation.data,
+        key: videoId,
+        playListId: context.query.playList,
+        index: context.query.playList,
+      },
+    };
+  }
+
   return {
-    props: { postDetails: data, recommendVideos: recomendation.data, key: id },
+    props: {
+      postDetails: data,
+      recommendVideos: recomendation.data,
+      key: videoId,
+    },
   };
 };
 

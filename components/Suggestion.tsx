@@ -9,14 +9,9 @@ interface IProps {
 }
 
 const Sugestion = ({ recommendVideos }: IProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const handlePostClick = (id: string) => {
-    axios.patch(`${BASE_URL}/api/post`, id);
-  };
   return (
-    <div className="bg-white dark:bg-black h-full">
-      <div className="lg:w-400 w-full flex flex-col justify-start mb-2 lg:border-l-2 lg:border-t-0 border-t-2 border-gray-100 p-3 gap-5">
+    <div className="bg-white w-full flex dark:bg-black h-full">
+      <div className=" w-full h-full flex flex-col justify-start mb-2 lg:border-l-2 lg:border-t-0 border-t-2 border-gray-100 p-3 gap-5">
         {recommendVideos.map((video: IRecomendation) => (
           <SuggestionCard post={video} key={video._id} />
         ))}
