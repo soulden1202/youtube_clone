@@ -148,6 +148,7 @@ const PlayList = ({
                   query: {
                     playList: playListId,
                     index: 0,
+                    userId: userProfile.id,
                   },
                 }}
               >
@@ -218,6 +219,8 @@ export const getServerSideProps = async (context: any) => {
         },
       }
     );
+
+    console.log(playListVideos.data[0].videos);
 
     return {
       props: {
