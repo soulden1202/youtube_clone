@@ -22,7 +22,8 @@
     "pages/_middleware.js",
     "pages/api/auth/[...nextauth].js",
     "pages/playlist/[id]",
-    "pages/api/liked/[id].js"
+    "pages/api/liked/[id].js",
+    "pages/api/playListQueue"
   ],
   "exclude": ["node_modules"]
 }

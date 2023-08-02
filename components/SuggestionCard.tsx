@@ -12,14 +12,17 @@ interface IProps {
 
 const VideoCard: NextPage<IProps> = ({ post }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  const data = { id: post._id };
   const router = useRouter();
 
-  const changeVideo = () => {};
+  const changeVideo = () => {
+    router.push(`/detail/${post._id}`);
+  };
 
   return (
-    <div className="flex flex-row justify-between w-full  hover:bg-gray-700 rounded-sm">
+    <div
+      onClick={changeVideo}
+      className="flex flex-row justify-between w-full cursor-pointer  hover:bg-gray-700 rounded-sm"
+    >
       <div className="flex flex-row lg:w-[50%] w-[30%] ">
         <div
           className="rounded-3xl object-cover h-full w-full"
@@ -49,10 +52,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
         </div>
       </div>
 
-      <div
-        className="flex flex-col ml-4 lg:w-[45%] w-[70%]  gap-1 "
-        onClick={changeVideo}
-      >
+      <div className="flex flex-col ml-4 lg:w-[45%] w-[70%]  gap-1 ">
         <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
           {post.caption.length >= 70
             ? `${post.caption.substring(0, 70)}...`

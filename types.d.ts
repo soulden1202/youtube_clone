@@ -70,6 +70,12 @@ export interface IRecomendation {
   };
 }
 
+export interface IPlayListQueue {
+  playListName: string;
+  _key: string;
+  videos: IRecomendation[];
+}
+
 export interface IUser {
   _id: string;
   _type: string;
