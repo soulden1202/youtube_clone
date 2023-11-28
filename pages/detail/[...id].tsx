@@ -51,6 +51,20 @@ const Detail = ({
         like,
       });
 
+      if (!(userProfile.id == post.postedBy._id) && like) {
+        const name: String[] = userProfile.name.split(" ");
+        const notificationDetail = {
+          subscriberId: post.postedBy._id,
+          firstName: name[0],
+          lastName: name[1],
+          videoLink: window.location.href,
+        };
+        axios.put(
+          `${BASE_URL}/api/novu/triggers/likedNotification`,
+          notificationDetail
+        );
+      }
+
       setpost({ ...post, likes: data.likes, dislikes: data.dislikes });
     }
   };

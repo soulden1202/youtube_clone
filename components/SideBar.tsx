@@ -137,6 +137,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
               </div>
             )}
             {userProfile &&
+              playLists &&
               playLists.length > 0 &&
               playLists.map((playList: any) => (
                 <div

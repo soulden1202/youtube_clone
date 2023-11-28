@@ -1,0 +1,10 @@
+11/27/2023
+Bug fixes:
+-Fixed problem where database and google login are not synchronized
+-Fixed problem where user cannot login if they dont have any play list
+
+Improvements:
+-Reduce number of api requests per page load but still not affect website performance
+
+New Features:
+-Added notification system
