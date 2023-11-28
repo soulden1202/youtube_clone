@@ -23,7 +23,8 @@
     "pages/api/auth/[...nextauth].js",
     "pages/playlist/[id]",
     "pages/api/liked/[id].js",
-    "pages/api/playListQueue"
+    "pages/api/playListQueue",
+    "novu/triggers.js"
   ],
   "exclude": ["node_modules"]
 }

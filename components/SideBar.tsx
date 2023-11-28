@@ -40,7 +40,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
 
     if (userProfile && !fetched) {
       fetchData().catch((e) => {
-        console.log(e);
+        console.log(e.message);
       });
     }
   }, [userProfile]);
@@ -137,6 +137,7 @@ const SideBar = ({ open, setOpen }: IProps) => {
               </div>
             )}
             {userProfile &&
+              playLists &&
               playLists.length > 0 &&
               playLists.map((playList: any) => (
                 <div

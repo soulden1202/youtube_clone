@@ -107,7 +107,7 @@ const VideoList: NextPage<IProps> = ({
     await axios
       .post(`${BASE_URL}/api/playLists/${userProfile.id}`, data)
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
       });
 
     addPlayList(newPlayList, playLists);

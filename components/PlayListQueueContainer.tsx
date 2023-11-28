@@ -33,7 +33,6 @@ const PlayListQueueContainer = ({
     return href;
   };
 
-  console.log(currentIndex);
   return (
     <div className="bg-gray-500 w-full flex-col flex max-h-[900px ] rounded-xl overflow-auto">
       <div className="dark:text-white font-bold flex w-full items-center justify-center text-lg">

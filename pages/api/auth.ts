@@ -10,9 +10,16 @@ export default async function handler(
     try {
       const user = req.body;
 
+      const userDoc = {
+        _type: "user",
+        _id: user._id,
+        userName: user.userName,
+        image: user.image,
+      };
+
       client
-        .createIfNotExists(user)
-        .then(() => res.status(200).json("Login sucess"));
+        .createIfNotExists(userDoc)
+        .then(() => res.status(200).json("User added to database"));
       client.getDocument(user._id).then((data) => {
         if (!data) return;
         if (data.userName !== user.userName) {
@@ -23,7 +30,6 @@ export default async function handler(
         }
       });
     } catch (error) {
-      console.log(error);
       res.status(500).json("AUTH_ERROR");
     }
   }

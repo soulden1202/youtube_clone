@@ -18,16 +18,26 @@ import useAuthStore from "../store/authStore";
 import { Button, Input } from "@material-tailwind/react";
 import SideBar from "./SideBar";
 import { useSession, signIn, signOut } from "next-auth/react";
-
+import {
+  NovuProvider,
+  PopoverNotificationCenter,
+  NotificationBell,
+} from "@novu/notification-center";
+import { Novu } from "@novu/node";
+import axios from "axios";
+import { BASE_URL } from "../utils";
 interface IProps {
   isDarkMode: boolean;
   setisDarkMode: Dispatch<SetStateAction<boolean>>;
 }
+import usePlayListStore from "../store/playListStore";
 
 const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
   const { addUser, removeUser } = useAuthStore();
+  const { userProfile }: { userProfile: any } = useAuthStore();
+  const { removePlayLists } = usePlayListStore();
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [searchTerms, setsearchTerms] = useState("");
 
@@ -36,9 +46,52 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     setOpen(true);
   };
 
+  const checkSubscriber = async () => {
+    if (localStorage.getItem("subcribed") === "true") {
+    } else {
+      if (userProfile.id) {
+        await axios
+          .get(`${BASE_URL}/api/novu/${userProfile.id}`)
+          .then((response: any) => {
+            localStorage.setItem("subcribed", "true");
+          })
+          .catch(async (err: any) => {
+            if (err.response.status == 404) {
+              let name = session?.user?.name?.split(" ") || "Unamed user";
+              let lastName = name[1];
+              let firstName = name[0];
+              await axios
+                .put(`${BASE_URL}/api/novu/${userProfile.id}`, {
+                  firstName: firstName,
+                  lastName: lastName,
+                  avatar: session?.user?.image,
+                })
+                .then(() => {
+                  localStorage.setItem("subcribed", "true");
+                });
+            }
+          });
+      }
+    }
+  };
+
+  const sycnWithDatabases = async () => {
+    const userData = {
+      userName: session?.user?.name,
+      image: session?.user?.image,
+      _id: userProfile.id,
+    };
+    await axios.post(`${BASE_URL}/api/auth`, userData);
+  };
+
   useEffect(() => {
-    if (session) {
-      addUser(session.user);
+    if (status === "authenticated") {
+      if (!userProfile) {
+        addUser(session.user);
+        sycnWithDatabases();
+      }
+
+      checkSubscriber();
     }
   }, [session]);
 
@@ -144,12 +197,34 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
               onClick={() => {
                 signOut();
                 removeUser();
+                removePlayLists();
+                localStorage.removeItem("subcribed");
                 router.push("/");
               }}
               className="text-red-500 px-2 dark:text-red-700 border-2 rounded dark:border-white"
             >
               <AiOutlineLogout></AiOutlineLogout>
             </button>
+            <div className="mt-1">
+              <NovuProvider
+                subscriberId={userProfile.id}
+                applicationIdentifier={"OXeIN2dNSWJ1"}
+              >
+                {isDarkMode ? (
+                  <PopoverNotificationCenter colorScheme={"dark"}>
+                    {({ unseenCount }) => (
+                      <NotificationBell unseenCount={unseenCount} />
+                    )}
+                  </PopoverNotificationCenter>
+                ) : (
+                  <PopoverNotificationCenter colorScheme={"light"}>
+                    {({ unseenCount }) => (
+                      <NotificationBell unseenCount={unseenCount} />
+                    )}
+                  </PopoverNotificationCenter>
+                )}
+              </NovuProvider>
+            </div>
           </div>
         ) : (
           <button
