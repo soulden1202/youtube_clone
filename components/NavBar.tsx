@@ -49,9 +49,11 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
   const checkSubscriber = async () => {
     if (localStorage.getItem("subcribed") === "true") {
     } else {
-      if (userProfile.id) {
+      // @ts-ignore: Unreachable code error
+      if (session?.user?.id) {
         await axios
-          .get(`${BASE_URL}/api/novu/${userProfile.id}`)
+          // @ts-ignore: Unreachable code error
+          .get(`${BASE_URL}/api/novu/${session?.user?.id}`)
           .then((response: any) => {
             localStorage.setItem("subcribed", "true");
           })
@@ -61,7 +63,8 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
               let lastName = name[1];
               let firstName = name[0];
               await axios
-                .put(`${BASE_URL}/api/novu/${userProfile.id}`, {
+                // @ts-ignore: Unreachable code error
+                .put(`${BASE_URL}/api/novu/${session?.user?.id}`, {
                   firstName: firstName,
                   lastName: lastName,
                   avatar: session?.user?.image,
@@ -79,7 +82,8 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     const userData = {
       userName: session?.user?.name,
       image: session?.user?.image,
-      _id: userProfile.id,
+      // @ts-ignore: Unreachable code error
+      _id: session?.user?.id,
     };
     await axios.post(`${BASE_URL}/api/auth`, userData);
   };
@@ -207,7 +211,8 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
             </button>
             <div className="mt-1">
               <NovuProvider
-                subscriberId={userProfile.id}
+                // @ts-ignore: Unreachable code error
+                subscriberId={session?.user?.id}
                 applicationIdentifier={"OXeIN2dNSWJ1"}
               >
                 {isDarkMode ? (
