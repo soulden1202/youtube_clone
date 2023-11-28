@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-Before you go just make sure you have all env varibles that listed in env.example
+Before you go just make sure you have all env variables that listed in env.example
 
 First, run the development server:
 
@@ -39,11 +39,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 
-##Sanity
+## Sanity
 
 To start Sanity dashboard change your current directory to sanity-backend and run:
 
 ```bash
 sanity start
 ```
-
+For doc please refer to: https://www.sanity.io/docs
