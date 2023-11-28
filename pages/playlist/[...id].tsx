@@ -220,8 +220,6 @@ export const getServerSideProps = async (context: any) => {
       }
     );
 
-    console.log(playListVideos.data[0].videos);
-
     return {
       props: {
         playListVideos: playListVideos.data[0].videos || null,

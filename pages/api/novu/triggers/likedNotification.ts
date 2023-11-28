@@ -14,8 +14,6 @@ export default async function handler(
   if (req.method === "PUT") {
     const { subscriberId, firstName, lastName, videoLink } = req.body;
 
-    console.log(subscriberId, firstName, lastName, videoLink);
-
     const notificationWorkflowId = "liked";
 
     await novu
@@ -30,11 +28,9 @@ export default async function handler(
         },
       })
       .then((response) => {
-        console.log(response);
         return res.status(200).json;
       })
       .catch((err) => {
-        console.log(err);
         return res.status(500).json;
       });
   }

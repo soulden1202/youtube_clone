@@ -49,10 +49,9 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
   const checkSubscriber = async () => {
     if (localStorage.getItem("subcribed") === "true") {
     } else {
-      console.log("called");
-      if (session?.user?.id) {
+      if (userProfile.id) {
         await axios
-          .get(`${BASE_URL}/api/novu/${session?.user?.id}`)
+          .get(`${BASE_URL}/api/novu/${userProfile.id}`)
           .then((response: any) => {
             localStorage.setItem("subcribed", "true");
           })
@@ -62,7 +61,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
               let lastName = name[1];
               let firstName = name[0];
               await axios
-                .put(`${BASE_URL}/api/novu/${session?.user?.id}`, {
+                .put(`${BASE_URL}/api/novu/${userProfile.id}`, {
                   firstName: firstName,
                   lastName: lastName,
                   avatar: session?.user?.image,
@@ -80,7 +79,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     const userData = {
       userName: session?.user?.name,
       image: session?.user?.image,
-      _id: session?.user?.id,
+      _id: userProfile.id,
     };
     await axios.post(`${BASE_URL}/api/auth`, userData);
   };
@@ -208,7 +207,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
             </button>
             <div className="mt-1">
               <NovuProvider
-                subscriberId={session?.user?.id}
+                subscriberId={userProfile.id}
                 applicationIdentifier={"OXeIN2dNSWJ1"}
               >
                 {isDarkMode ? (
