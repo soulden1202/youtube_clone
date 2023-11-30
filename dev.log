@@ -1,3 +1,11 @@
+11/29/2023
+
+Improvements:
+-Login button now bigger and more clear
+-Click on new like notification now will redirect to the video page 
+
+
+
 11/27/2023
 Bug fixes:
 -Fixed problem where database and google login are not synchronized
