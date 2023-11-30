@@ -106,6 +106,10 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
     }
   };
 
+  function onNotificationClick(notification: any): void {
+    router.push(notification.cta.data.url);
+  }
+
   return (
     <div className="w-full bg-white dark:bg-black flex justify-between items-center border-b-2 border-gray-200 py-2 px-4 ">
       <div className="flex flex-row gap-0 justify-center items-center">
@@ -216,13 +220,19 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
                 applicationIdentifier={"OXeIN2dNSWJ1"}
               >
                 {isDarkMode ? (
-                  <PopoverNotificationCenter colorScheme={"dark"}>
+                  <PopoverNotificationCenter
+                    colorScheme={"dark"}
+                    onNotificationClick={onNotificationClick}
+                  >
                     {({ unseenCount }) => (
                       <NotificationBell unseenCount={unseenCount} />
                     )}
                   </PopoverNotificationCenter>
                 ) : (
-                  <PopoverNotificationCenter colorScheme={"light"}>
+                  <PopoverNotificationCenter
+                    colorScheme={"light"}
+                    onNotificationClick={onNotificationClick}
+                  >
                     {({ unseenCount }) => (
                       <NotificationBell unseenCount={unseenCount} />
                     )}
@@ -237,7 +247,7 @@ const NavBar = ({ setisDarkMode, isDarkMode }: IProps) => {
             onClick={() => {
               signIn("google");
             }}
-            className="text-red-500 px-2 dark:text-red-700 border-2 rounded dark:border-white"
+            className="text-red-500 px-3 hover:bg-black  dark:hover:bg-white py-2 dark:text-red-700 border-2 rounded dark:border-white"
           >
             Login
           </button>
