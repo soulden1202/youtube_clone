@@ -16,6 +16,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import PlayListQueueContainer from "../../components/PlayListQueueContainer";
 import { useRouter } from "next/router";
+import {
+  VideoHeader,
+  VideoDescription,
+  VideoActions,
+  VideoUser,
+} from "../../components/VideoDetail/Atoms";
 
 interface IProps {
   postDetails: Video;
@@ -157,34 +163,11 @@ const Detail = ({
           <div className="mt-0 flex flex-row justify-between align-center  border-b-2  border-gray-400">
             <div className="ml-3 flex flex-col w-[50%]">
               <div className="flex flex-row">
-                <div className="w-10 h-10 mr-2 ">
-                  <div>
-                    <Link href="/">
-                      <>
-                        <Image
-                          width={65}
-                          height={65}
-                          className="rounded-full cursor-pointer"
-                          src={post.postedBy.image}
-                          alt="profile photo"
-                        ></Image>
-                      </>
-                    </Link>
-                  </div>
-                </div>
+                <VideoUser postedBy={post.postedBy} />
                 <div className="mb-3">
-                  <div className="flex flex-col  gap-1">
-                    <p className="flex gap-2 items-center md:text-md font-bold text-primary dark:text-white">
-                      {post.caption}
-                    </p>
-                    <div className=" flex flex-col gap-1">
-                      <div>
-                        <p className="flex gap-1 font-medium text-xs items-center text-primary dark:text-white">
-                          {post.postedBy.userName} {` `}
-                          <GoVerified className="text-blue-400 text-md" />
-                        </p>
-                      </div>
-
+                  <div className="flex flex-col gap-1">
+                    <VideoHeader caption={post.caption} />
+                    <div className="flex flex-col gap-1">
                       <div className="flex md:flex-row flex-col gap-1 ">
                         <div>
                           <p className="  text-xsfont-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
@@ -208,51 +191,19 @@ const Detail = ({
                   </div>
                 </div>
               </div>
-              <div>
-                {!showDes && (
-                  <span
-                    onClick={() => setshowDes(true)}
-                    className="ml-[2.9rem] cursor-pointer font-medium text-xs capitalize text-blue-500 dark:text-blue-500 hover:underline"
-                  >
-                    Show Description
-                  </span>
-                )}
-
-                {showDes && (
-                  <div className="ml-[2.9rem] mt-3">
-                    <div className="font-medium text-xs capitalize text-gray-500 dark:text-gray-300 ">
-                      {post.description}
-                    </div>
-                    <div className="mt-3 ">
-                      <span
-                        onClick={() => setshowDes(false)}
-                        className="cursor-pointer font-medium text-xs capitalize text-blue-500 dark:text-blue-500 hover:underline"
-                      >
-                        Hide Description
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <VideoDescription 
+                description={post.description} 
+                showDes={showDes} 
+                setShowDes={setshowDes} 
+              />
             </div>
-            {userProfile && (
-              <div className="flex flex-row mr-10 gap-12">
-                <div>
-                  <Like
-                    likes={post.likes}
-                    handleLike={() => handleLike(true)}
-                    handleUnlike={() => handleLike(false)}
-                  ></Like>
-                </div>
-                <div>
-                  <Dislike
-                    dislikes={post.dislikes}
-                    handleDislike={() => handleDislike(true)}
-                    handleUndislike={() => handleDislike(false)}
-                  ></Dislike>
-                </div>
-              </div>
-            )}
+            <VideoActions 
+              likes={post.likes} 
+              dislikes={post.dislikes} 
+              handleLike={handleLike} 
+              handleDislike={handleDislike} 
+              userProfile={userProfile} 
+            />
           </div>
           <div>
             <Comments

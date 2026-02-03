@@ -1,0 +1,4 @@
+/* CSS module for SuggestionCard */
+.suggestionCardContainer {
+  display: flex;
+}

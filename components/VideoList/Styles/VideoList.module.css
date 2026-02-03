@@ -1,0 +1,4 @@
+/* CSS module for VideoList */
+.videoListContainer {
+  display: flex;
+}
